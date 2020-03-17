@@ -5,82 +5,55 @@ import org.fusesource.jansi.AnsiConsole;
 import seedu.nuke.command.Command;
 import seedu.nuke.command.CommandResult;
 import seedu.nuke.command.ExitCommand;
-import seedu.nuke.data.DataManager;
-import seedu.nuke.data.ModuleLoader;
-import seedu.nuke.data.ModuleManager;
-import seedu.nuke.module.DummyModule;
+
 import seedu.nuke.parser.Parser;
-import seedu.nuke.ui.TextUi;
 import seedu.nuke.ui.Ui;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
 import static org.fusesource.jansi.Ansi.ansi;
-import static seedu.nuke.ui.TextUi.printDivider;
 import static seedu.nuke.util.ExceptionMessage.*;
 
 public class Nuke {
-    private CommandResult commandResult;
-    private ModuleManager moduleManager;
-    private DataManager dataManager;
-    public HashMap<String,String> modulesMap;
     private Ui ui;
-
-    public Nuke() throws FileNotFoundException {
-        moduleManager = new ModuleManager();
-        dataManager = new DataManager(moduleManager);
-        modulesMap  = ModuleLoader.load("moduleList.json");
-    }
-
     /**
      * Main entry-point for the java.duke.Duke application.
      */
-    public static void main(String[] args) throws FileNotFoundException {
-        TextUi.clearScreen();
-        TextUi.displayLogo();
-        new Nuke().run();
-    }
+    public static void main(String[] args) {
+        AnsiConsole.systemInstall();
+        ansi().reset();
+        System.out.println(ansi().bold().fg(Ansi.Color.RED).a("Hello from NUKE.").reset());
+        //System.out.println(ansi().bold().fg(Ansi.Color.BLUE).a(logo).reset());
+        System.out.println(ansi().bold().fg(Ansi.Color.MAGENTA).a("Hope to see you soon.").reset());
 
-    private void run() {
-        this.ui = new Ui();
+        Nuke nuke = new Nuke();
+        nuke.run();
 
-        TextUi.showWelcomeMessage();
-        runCommandLoopUntilExitCommand();
-    }
-
-    private void runCommandLoopUntilExitCommand() {
-        do {
-            String userCommandText = ui.getInput();
-            Command command = new Parser().parseCommand(userCommandText);
-            CommandResult result = executeCommand(command);
-            ui.showResult(result);
-        } while (!ExitCommand.isExit());
+        AnsiConsole.systemUninstall();
     }
 
     /**
-     * initialize the taskManager system, execute command and save the list to the file
-     * @param command the parsed Command object
-     * @return commandResult that contains the execute output information
+     * Prints welcome message, initialises task list and runs program until termination.
+     * <p></p>
+     * <b>Note:</b> Program exits if task list initialisation fails.
      */
-    private CommandResult executeCommand(Command command) {
-        try {
-            // supplies the data the command will operate on.
-            // if there is no file to load or the file is empty, setData will initialize a new taskManager system
-            //update the module manager as well as the data manager
-            command.setData(moduleManager, dataManager);
-            // Execute according to the command itself
-            commandResult = command.execute();
-            // save the taskManager to a file
-            //moduleManager.getStorager().save(taskManager);
-            //StorageFile.saveJson(taskManager);
-        } catch (Exception ex) {
-            // the out layer exception handler
-            System.out.println(ex);
-        }
-        return commandResult;
+    private void run() {
+        this.ui = new Ui();
+
+        readInputUntilExit();
+    }
+
+    /**
+     *  Reads user input from the command line until an <b><i>exit</i></b> command is given.
+     *  Each user input is converted into a command by the <b>Parser</b> and executed. The <b>UI.java</b> then displays
+     *  any feedback message or necessary information to the user.
+     * @see Parser
+     * @see Ui
+     */
+    private void readInputUntilExit() {
+        do {
+            String input = ui.getInput();
+            Command command = new Parser().parseInput(input);
+            CommandResult result = command.execute();
+            ui.showResult(result);
+        } while (!ExitCommand.isExit());
     }
 }

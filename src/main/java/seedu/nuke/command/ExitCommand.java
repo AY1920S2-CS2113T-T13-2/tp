@@ -1,18 +1,19 @@
 package seedu.nuke.command;
 
-import seedu.nuke.task.Task;
+import static seedu.nuke.util.Message.MESSAGE_EXIT;
 
-import static seedu.nuke.util.Message.MESSAGE_FAREWELL;
-
-public class ExitCommand extends TaskCommand{
-    public static final String COMMAND_WORD = "bye";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Exit the program.\n    Example: " + COMMAND_WORD;
-
-
+/**
+ * <h3>Exit Command</h3>
+ * A <b>Command</b> to exit the <b>Nuke</b> program.
+ * @see Command
+ */
+public class ExitCommand extends Command {
+    public static final String COMMAND_WORD = "quit";
+    public static final String FORMAT = "quit";
     private static boolean isExit; // To check if user requests to exit the program
 
     public ExitCommand() {
-        isExit = false;
+        isExit = false; // Set to false until user requests to exit the program (after confirmation if necessary)
     }
 
     /**
@@ -24,7 +25,7 @@ public class ExitCommand extends TaskCommand{
     @Override
     public CommandResult execute() {
         isExit = true;
-        return new CommandResult(MESSAGE_FAREWELL);
+        return new CommandResult(MESSAGE_EXIT);
     }
 
     /**

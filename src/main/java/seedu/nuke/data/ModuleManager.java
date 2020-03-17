@@ -1,15 +1,14 @@
 package seedu.nuke.data;
 
-import seedu.nuke.exception.DataNotFoundException;
 import seedu.nuke.exception.DuplicateDataException;
 import seedu.nuke.exception.ModuleNotFoundException;
-import seedu.nuke.module.Module;
+import seedu.nuke.data.module.Module;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static seedu.nuke.util.Message.*;
+import static seedu.nuke.util.ExceptionMessage.*;
 
 public class ModuleManager implements Iterable<Module> {
     private static ArrayList<Module> modules = new ArrayList<>();
@@ -46,8 +45,9 @@ public class ModuleManager implements Iterable<Module> {
      */
     public static void add(Module toAdd) throws DuplicateModuleException {
         //check duplicate
-        if (ModuleManager.contains(toAdd)) {
-            throw new DuplicateModuleException();
+        if (modules.contains(toAdd)){
+            //display duplicate message
+            System.out.println(MESSAGE_DUPLICATE_MODULE);
         } else {
             modules.add(toAdd);
         }

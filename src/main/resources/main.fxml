@@ -165,18 +165,18 @@
                         </VBox>
                         <VBox prefHeight="463.0" prefWidth="360.0" HBox.hgrow="ALWAYS">
                             <children>
-                        <ScrollPane fx:id="consoleScreenScrollPane" prefHeight="419.0" prefWidth="735.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                           <content>
-                                      <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="423.0" prefWidth="715.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: white;">
-                                          <padding>
-                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </padding>
-                                          <effect>
-                                              <InnerShadow color="#ababab" height="15.0" radius="7.0" width="15.0" />
-                                          </effect>
-                                      </TextFlow>
-                           </content>
-                        </ScrollPane>
+                                <ScrollPane fx:id="consoleScreenScrollPane" prefHeight="419.0" prefWidth="735.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="423.0" prefWidth="715.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: white;">
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                            </padding>
+                                            <effect>
+                                                <InnerShadow color="#ababab" height="15.0" radius="7.0" width="15.0" />
+                                            </effect>
+                                        </TextFlow>
+                                    </content>
+                                </ScrollPane>
                                 <Separator prefWidth="200.0">
                                     <padding>
                                         <Insets top="2.0" />

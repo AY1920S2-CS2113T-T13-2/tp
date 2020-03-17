@@ -1,8 +1,9 @@
 package seedu.nuke.ui;
 
 import seedu.nuke.command.CommandResult;
-import seedu.nuke.module.Module;
-import seedu.nuke.data.ModuleManager;
+import seedu.nuke.common.DataType;
+import seedu.nuke.data.module.Module;
+import seedu.nuke.data.module.ModuleList;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -37,7 +38,7 @@ public class Ui {
      */
     public void showResult(CommandResult result) {
         out.println(result.getFeedbackToUser().replace("\n", LS));
-        if (result.isShowTasks()) {
+        if (result.getDataType() == DataType.MODULE) {
             showSystemMessage(createModuleList());
         }
     }
@@ -62,7 +63,7 @@ public class Ui {
 
         listToShow.append(DIVIDER);
 
-        for (Module module : ModuleManager.getModuleList()) {
+        for (Module module : ModuleList.getModuleList()) {
             listToShow.append(String.format("%s\n", module.getModuleCode()));
         }
 
