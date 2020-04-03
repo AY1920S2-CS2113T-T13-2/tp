@@ -1,15 +1,20 @@
 package seedu.nuke.gui.component;
 
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextFlow;
 import seedu.nuke.data.ModuleManager;
 import seedu.nuke.directory.Task;
+import seedu.nuke.gui.io.GuiExecutor;
 import seedu.nuke.util.DateTime;
 import seedu.nuke.util.DateTimeFormat;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -66,7 +71,7 @@ public class DailyTaskCounter {
         for (Task task : taskList) {
             DateTime deadline = task.getDeadline();
             // The task is undone and is due on that date
-            if (deadline != null && deadline.isOn(dateOfDay) && !task.isDone()) {
+            if (deadline.isPresent() && deadline.isOn(dateOfDay) && !task.isDone()) {
                 ++taskCount;
             }
         }
@@ -87,7 +92,7 @@ public class DailyTaskCounter {
         for (Task task : taskList) {
             DateTime deadline = task.getDeadline();
             // The task is undone and is overdue
-            if (deadline != null && deadline.isDue() && !task.isDone()) {
+            if (deadline.isPresent() && deadline.isDue() && !task.isDone()) {
                 ++taskCount;
             }
         }
@@ -128,5 +133,75 @@ public class DailyTaskCounter {
     public void setOverdueTaskCount() {
         int taskCount = countOverdueTask();
         countLabel.setText(String.valueOf(taskCount));
+    }
+
+    /**
+     * Executes the command to show the undone tasks on the current day upon clicking on a Daily Task Box in the
+     * Daily Task Counter Panel.
+     *
+     * @param mouseEvent
+     *  The mouse click event
+     * @param consoleScreen
+     *  The console screen to display the message
+     */
+    public static void onClickDailyTask(MouseEvent mouseEvent, TextFlow consoleScreen) {
+        final String dueMondayString = "due mon";
+        final String dueTuesdayString = "due tue";
+        final String dueWednesdayString = "due wed";
+        final String dueThursdayString = "due thu";
+        final String dueFridayString = "due fri";
+        final String dueSaturdayString = "due sat";
+        final String dueSundayString = "due sun";
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            VBox dailyTaskBox = (VBox) mouseEvent.getSource();
+            switch (dailyTaskBox.getId()) {
+            case "mondayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueMondayString);
+                break;
+
+            case "tuesdayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueTuesdayString);
+                break;
+
+            case "wednesdayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueWednesdayString);
+                break;
+
+            case "thursdayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueThursdayString);
+                break;
+
+            case "fridayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueFridayString);
+                break;
+
+            case "saturdayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueSaturdayString);
+                break;
+
+            case "sundayBox":
+                new GuiExecutor(consoleScreen).executeAction(dueSundayString);
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
+    /**
+     * Executes the command to show the overdue undone tasks upon clicking on the Overdue Task Box in the
+     * Daily Task Counter Panel.
+     *
+     * @param mouseEvent
+     *  The mouse click event
+     * @param consoleScreen
+     *  The console screen to display the message
+     */
+    public static void onClickOverdueTask(MouseEvent mouseEvent, TextFlow consoleScreen) {
+        final String overdueString = "due over";
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            new GuiExecutor(consoleScreen).executeAction(overdueString);
+        }
     }
 }

@@ -7,7 +7,6 @@ import seedu.nuke.data.ModuleManager;
 import seedu.nuke.data.ScreenShotManager;
 import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.data.storage.StoragePath;
-import seedu.nuke.directory.Root;
 import seedu.nuke.ui.TextUi;
 import seedu.nuke.ui.Ui;
 import seedu.nuke.util.Message;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 
 public class Nuke {
     private CommandResult commandResult;
-    private ModuleManager moduleManager;
     private HashMap<String, String> modulesMap;
     private Ui ui;
     private StorageManager storageManager;
@@ -31,7 +29,7 @@ public class Nuke {
         ui = new Ui();
         modulesMap = ModuleLoader.load(StoragePath.NUS_MODULE_LIST_PATH);
         storageManager = new StorageManager(StoragePath.SAVE_PATH);
-        moduleManager = ModuleManager.getInstance(new Root(), modulesMap);
+        ModuleManager.initialise(modulesMap);
         storageManager.loadList();
         ScreenShotManager.saveScreenShot();
     }
@@ -83,13 +81,8 @@ public class Nuke {
             ui.showResult(commandResult);
 
             ScreenShotManager.saveScreenShot();
-            //storageManager.save();
             storageManager.saveList();
         } while (!ExitCommand.isExit());
-    }
-
-    public ModuleManager getModuleManager() {
-        return moduleManager;
     }
 
     public CommandResult getCommandResult() {

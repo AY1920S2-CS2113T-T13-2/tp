@@ -81,7 +81,8 @@ public class DeleteModuleCommand extends DeleteCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredModules = createFilteredModuleList(moduleCode, isExact);
-        return executeInitialDelete(filteredModules);
+        ArrayList<Module> filteredModules = createFilteredModuleList(moduleCode, isExact);
+        sortModuleList(filteredModules);
+        return executeInitialDelete(new ArrayList<>(filteredModules));
     }
 }

@@ -9,13 +9,7 @@ group work -|||- Y -|||- 28/03/2020 06:00PM -|||- 20
 --- END TASK ---
 Lab -|||- 3
 --- TASK ---
-c -|||- N -|||- 01/04/2020 03:00PM -|||- 3
---- FILE ---
---- END FILE ---
-h -|||- N -|||- 02/04/2020 03:00PM -|||- 3
---- FILE ---
---- END FILE ---
-i -|||- N -|||- 02/04/2020 03:00PM -|||- 3
+a task -|||- Y -|||- 03/04/2020 03:00PM -|||- 3
 --- FILE ---
 --- END FILE ---
 work -|||- N -|||- 31/03/2020 08:00PM -|||- 3
@@ -28,6 +22,9 @@ Lecture -|||- 1
 Tutorial -|||- 2
 --- TASK ---
 Tutorial 6 -|||- N -|||- 24/03/2020 11:59PM -|||- 6
+--- FILE ---
+--- END FILE ---
+a work -|||- N -|||- 03/04/2020 08:00PM -|||- 2
 --- FILE ---
 --- END FILE ---
 --- END TASK ---
@@ -52,6 +49,9 @@ Tutorial -|||- 2
 --- END CATEGORY ---
 CS2113 -|||- Software Engineering & Object-Oriented Programming -|||- NIL
 --- CATEGORY ---
+A -|||- 0
+--- TASK ---
+--- END TASK ---
 Assignment -|||- 4
 --- TASK ---
 --- END TASK ---
@@ -80,7 +80,7 @@ tutorial worksheet 10 -|||- N -|||- 25/03/2020 12:00PM -|||- 5
 --- END FILE ---
 --- END TASK ---
 --- END CATEGORY ---
-CS3235 -|||- Computer Security -|||- NIL
+CS2113T -|||- Software Engineering & Object-Oriented Programming -|||- NIL
 --- CATEGORY ---
 Assignment -|||- 4
 --- TASK ---
@@ -91,7 +91,22 @@ Lab -|||- 3
 Lecture -|||- 1
 --- TASK ---
 --- END TASK ---
-Programming Assignment -|||- 0
+Tutorial -|||- 2
+--- TASK ---
+--- END TASK ---
+--- END CATEGORY ---
+CS3230 -|||- Design and Analysis of Algorithms -|||- NIL
+--- CATEGORY ---
+Assignment -|||- 4
+--- TASK ---
+--- END TASK ---
+Lab -|||- 3
+--- TASK ---
+lab1 -|||- N -|||-  -|||- 3
+--- FILE ---
+--- END FILE ---
+--- END TASK ---
+Lecture -|||- 1
 --- TASK ---
 --- END TASK ---
 Tutorial -|||- 2

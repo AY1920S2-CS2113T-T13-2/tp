@@ -80,7 +80,7 @@ public class Encoder {
 
     private String getTaskInformation(Task task) {
         String doneStatus = task.isDone() ? "Y" : "N";
-        String deadline = (task.getDeadline() != null) ? task.getDeadline().toString() : "";
+        String deadline = task.getDeadline().isPresent() ? task.getDeadline().toString() : "";
         return String.join(DELIMITER, task.getDescription(), doneStatus, deadline, String.valueOf(task.getPriority()));
     }
 

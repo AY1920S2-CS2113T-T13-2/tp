@@ -11,6 +11,6 @@ public class Launcher {
      *  Standard arguments for running
      */
     public static void main(String[] args) {
-        Application.launch(InfiNus.class, args);
+        Application.launch(InfiNuke.class, args);
     }
 }

@@ -1,12 +1,13 @@
 package seedu.nuke.command.filtercommand.listcommand;
 
 import seedu.nuke.command.CommandResult;
-import seedu.nuke.directory.Directory;
 import seedu.nuke.directory.DirectoryLevel;
 import seedu.nuke.directory.Task;
+import seedu.nuke.directory.TaskFile;
 
 import java.util.ArrayList;
 
+import static seedu.nuke.util.Message.MESSAGE_NO_FILES_TO_SHOW;
 import static seedu.nuke.util.Message.MESSAGE_SHOW_LIST;
 
 public class ListFileCommand extends ListCommand {
@@ -38,7 +39,7 @@ public class ListFileCommand extends ListCommand {
      *  Checks whether to show <b>all</b> tasks across modules and categories
      */
     public ListFileCommand(String moduleKeyWord, String categoryKeyword, String taskKeyword, String fileKeyword,
-               boolean isExact, boolean isAll) {
+                           boolean isExact, boolean isAll) {
         this.moduleKeyWord = moduleKeyWord;
         this.categoryKeyword = categoryKeyword;
         this.taskKeyword = taskKeyword;
@@ -56,8 +57,12 @@ public class ListFileCommand extends ListCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredFileList =
+        ArrayList<TaskFile> filteredFileList =
                 createFilteredFileList(moduleKeyWord, categoryKeyword, taskKeyword, fileKeyword, isExact, isAll);
-        return new CommandResult(MESSAGE_SHOW_LIST, DirectoryLevel.FILE, filteredFileList);
+        if (filteredFileList.isEmpty()) {
+            return new CommandResult(MESSAGE_NO_FILES_TO_SHOW);
+        }
+        sortFileList(filteredFileList);
+        return new CommandResult(MESSAGE_SHOW_LIST, DirectoryLevel.FILE, new ArrayList<>(filteredFileList));
     }
 }

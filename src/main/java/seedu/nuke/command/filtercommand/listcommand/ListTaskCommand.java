@@ -1,12 +1,12 @@
 package seedu.nuke.command.filtercommand.listcommand;
 
 import seedu.nuke.command.CommandResult;
-import seedu.nuke.directory.Directory;
 import seedu.nuke.directory.DirectoryLevel;
 import seedu.nuke.directory.Task;
 
 import java.util.ArrayList;
 
+import static seedu.nuke.util.Message.MESSAGE_NO_TASKS_TO_SHOW;
 import static seedu.nuke.util.Message.MESSAGE_SHOW_LIST;
 
 public class ListTaskCommand extends ListCommand {
@@ -37,7 +37,7 @@ public class ListTaskCommand extends ListCommand {
      *  Checks whether to show <b>all</b> tasks across modules, categories and tasks
      */
     public ListTaskCommand(String moduleKeyWord, String categoryKeyword, String taskKeyword,
-               boolean isExact, boolean isAll) {
+                           boolean isExact, boolean isAll) {
         this.moduleKeyWord = moduleKeyWord;
         this.categoryKeyword = categoryKeyword;
         this.taskKeyword = taskKeyword;
@@ -54,8 +54,12 @@ public class ListTaskCommand extends ListCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredTaskList =
+        ArrayList<Task> filteredTaskList =
                 createFilteredTaskList(moduleKeyWord, categoryKeyword, taskKeyword, isExact, isAll);
-        return new CommandResult(MESSAGE_SHOW_LIST, DirectoryLevel.TASK, filteredTaskList);
+        if (filteredTaskList.isEmpty()) {
+            return new CommandResult(MESSAGE_NO_TASKS_TO_SHOW);
+        }
+        sortTaskList(filteredTaskList, false, false);
+        return new CommandResult(MESSAGE_SHOW_LIST, DirectoryLevel.TASK, new ArrayList<>(filteredTaskList));
     }
 }

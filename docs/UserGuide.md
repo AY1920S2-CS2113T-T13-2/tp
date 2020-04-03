@@ -22,10 +22,12 @@
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; a. Delete Modules from your Module List [&#10149;](#a-delete-modules-from-your-module-list)    
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; b. Delete Categories from your Category List [&#10149;](#b-delete-categories-from-your-category-list)    
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c. Delete Tasks from your Task List [&#10149;](#c-delete-tasks-from-your-task-list)    
+
 #### &nbsp; &nbsp; &nbsp; &nbsp; **4. Edit** [&#10149;](#4-edit)  
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; a. Edit a Module in your Module List [&#10149;](#a-edit-a-module-in-your-module-list)    
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; b. Edit a Category in your Category List [&#10149;](#b-edit-a-category-in-your-category-list)    
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; c. Edit a Task in your Task List [&#10149;](#c-edit-a-task-in-your-task-list)    
+
 #### &nbsp; &nbsp; &nbsp; &nbsp; **5. Mark a Task as Done** [&#10149;](#5-mark-a-task-as-done)  
 #### &nbsp; &nbsp; &nbsp; &nbsp; **6. Change Directory** [&#10149;](#6-change-directory)  
 ### **Miscellaneous Information** [&#10149;](#miscellaneous-information)  
@@ -69,7 +71,7 @@ This section will explain the fundamental structure of the **Nuke** application,
 <br>
 
 ```
-	// Maybe I will add a sample Directory Tree diagram here
+	// Todo add a sample Directory Tree diagram here
 ```
 
 ### Root   
@@ -136,7 +138,7 @@ As mentioned previously, **Nuke** follows the structure of a **Directory Tree** 
 
 - When you are at the **Root Directory**, `mkdir <module code>` will add a *module* into your **Module List**.
 - When you are at the **Module Directory**, `mkdir <category name>` will add a _category_ into your **Category List**.
-- When you are at the Category Directory, `mkdir <task description>` will add a _task_ into your **Task List**.
+- When you are at the **Category Directory**, `mkdir <task description>` will add a _task_ into your **Task List**.
 
 The above mentioned commands have to be done in the corresponding directories, and the commands below can be done in any directories, but less generic.
 
@@ -212,11 +214,12 @@ Adds a _task_ into your **Task List**. The **Task List** contains all your added
 
 #### Format  
 `addt <task description> -m <module code> -c <category name> [ -d <deadline> -p <priority> ]`  
-- `task description` -- The _description_ of the _task_
-- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
-- `category name` -- The _name_ of the   _category_
-- `deadline` -- The _deadline_ of the _task_
-- `priority` -- A number indicating the  _priority_ of the _category_
+
+- `task description` -- The _description_ of the _task_  
+- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added  
+- `category name` -- The _name_ of the   _category_  
+- `deadline` -- The _deadline_ of the _task_  
+- `priority` -- A number indicating the  _priority_ of the _category_   
 > **Note**: You need **not** include the `module code` if you are currently in that _module_'s directory. Also, you need **not** include both `module code` and `category name`  if you are currently in that _category_'s directory. You can move to the  the respective directories via the [Change Directory](#6-change-directory) Command.  
 > **Note**: The `priority` that you give must be a number between 0 and 100 inclusive. The bigger the number, the more important the task. If the `priority` is not given, then it will be set to the same _priority_ as it's _category_.  
 > **Note**: The `deadline` provided consists of both a _date_ and a _time_. The `deadline` provided must adhere to the set of accepted [Date Time formats](#date-time-formats).   
@@ -243,144 +246,225 @@ SUCCESS!! Task urgent assignment is created.
 <br>
 
 ## 2. List  
-Lists the _modules_, _categories_ or _tasks_ in their respective lists.<br>  
+Lists the _modules_, _categories_ or _tasks_ in their respective lists.<br>
 
-#### a. List your Modules  
-```
-	// To do
-```
+As mentioned previously, **Nuke** follows the structure of a **Directory Tree** _(i.e. folder sub-folder structure)_. Therefore, **Nuke** also supports Linux file-system-related command for listing files in a directory: `ls`
 
-#### Format  
-```
-	// To do
-```
+- When you are at the **Root Directory**, `ls` will list out all your *module*s in your **Module List**. `ls <module code>` will list out all *category*s in the **Category List** in the *module*
+- When you are at the **Module Directory**, `ls` will list out all the *category*s in your **Category List**. `ls <category name>` will list out all *task*s in the **Task List** in the *category*
+- When you are at the **Category Directory**, `ls` will list out all the *task*s in your **Task List**.
 
-#### Example Usage    
-```
-	// To do
-```
+The above mentioned commands have to be done in the corresponding directories, and the commands below can be done in any directories, but less generic.
 
-#### Expected Outcome    
-```
-	// To do
-```
+#### a. List your Modules
 
-<br>  
-
-#### b. List your Categories  
-```
-	// To do
-```
+List all *module*s in your **Module List**. The **Module List** contains all your added _modules_ and can be viewed via the List Module command.
 
 #### Format  
-```
-	// To do
-```
+
+`lsm`  
+
+> **Note**: The _module code_ is **case-insensitive**. However, it must correspond to a valid **NUS module**. Only **NUS modules** can be added in this version of **Nuke**.
 
 #### Example Usage    
+
 ```
-	// To do
+lsm
 ```
 
-#### Expected Outcome    
-```
-	// To do
-```
+#### Expected Outcome 
 
-<br>  
+![image-20200401011642619](images/ug_lsm.png)
+
+
+
+#### b. List your Categories
+
+List all *category*s in your **Category List**. The **Category List** contains all your added _categories_ in the _module_ and can be viewed via the List Category command.
+
+#### Format  
+
+`lsc [ -m <module code> ]`  
+
+- `module code` -- The _module code_ of the _module_ to contain the _category_ to be added
+
+> **Note**: You need **not** include the `module code` information if you are currently in that _module_'s directory. You can move to the  _module_'s directory via the [Change Directory](#6-change-directory) Command.
+
+#### Example Usage    
+
+`lsc -m c3235` when not in the _module_'s directory
+
+`lsc` when in the _module_'s directory
+
+#### Expected Outcome
+
+![image-20200401012031973](images/ug_lsc.png)
+
+
 
 #### c. List your Tasks  
-```
-	// To do
-```
+
+List all the *task*s in your **Task List**. The **Task List** contains all your added _tasks_ in the _category_ and can be viewed via the List Task command.
 
 #### Format  
+
 ```
-	// To do
+lst [ -m <module code> -c <category name>]
 ```
+
+> **Note**: You need **not** include the `module code` if you are currently in that _module_'s directory. Also, you need **not** include both `module code` and `category name`  if you are currently in that _category_'s directory. You can move to the  the respective directories via the [Change Directory](#6-change-directory) Command.  
 
 #### Example Usage    
-```
-	// To do
-```
+
+`lst -m cs3235 -c Assignment` when not in the *module*'s  directory
+
+`lst -c Assignment` when not in the *category*'s directory
+
+`lst` when in the category's directory
 
 #### Expected Outcome    
-```
-	// To do
-```
+![image-20200401012942212](images/ug_lst.png)
 
-<br><br>  
+  
 
 ## 3. Delete  
-Deletes _modules_, _categories_ or _tasks_ from their respective lists.<br>  
+Deletes _modules_, _categories_ or _tasks_ from their respective lists.<br>
+
+As mentioned previously, **Nuke** follows the structure of a **Directory Tree** _(i.e. folder sub-folder structure)_. Therefore, **Nuke** also supports Linux file-system-related command for listing files in a directory: `rm`
+
+- When you are at the **Root Directory**, `rm <module code>` will remove a *module* from your **Module List**.
+- When you are at the **Module Directory**, `rm <category name>` will remove a *category* from your **Category List**. 
+- When you are at the **Category Directory**, `rm <task name>` will remove a _task_ from your **Task List**.
+
+For Delete command, user will be prompted to confirm by entering `y` or `yes`  or to abort by entering `n` or `no` after entering the Delete command.
+
+The above mentioned commands have to be done in the corresponding directories, and the commands below can be done in any directories, but less generic.
 
 #### a. Delete Modules from your Module List
-```
-	// To do
-```
+
+Delete a _module_ from your **Module List**. The **Module List** contains all your added _modules_ and can be viewed via the List Module command.
 
 #### Format  
-```
-	// To do
-```
+
+`delm <module code>`  
+
+- `module code` -- The _module code_ of the _module_  
+
+> **Note**: The _module code_ is **case-insensitive**. However, it must correspond to a valid **NUS module**. Only **NUS modules** can be deleted in this version of **Nuke**.
 
 #### Example Usage    
+
 ```
-	// To do
+	delm cs3235
 ```
 
-#### Expected Outcome    
+#### Expected Outcome
+
 ```
-	// To do
+root :
+delm cs3235
+Confirm delete CS3235 Computer Security?
+
+root :
+y
+SUCCESS!! Module(s) have been deleted.
 ```
 
-<br>  
+##### before:
+
+![image-20200401015356560](images/ug_delm_before.png)
+
+##### after:
+
+![image-20200401015411123](images/ug_delm_after.png)
+
+
 
 #### b. Delete Categories from your Category List   
-```
-	// To do
-```
+
+Delete a _category_ from your **Category List**. The **Category List** contains all your added _categories_ in the _module_ and can be viewed via the List Category command.
 
 #### Format  
-```
-	// To do
-```
+
+`delc <category name> -m <module code>`  
+
+- `category name` -- The _name_ of the   _category_
+- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
+
+> **Note**: You need **not** include the `module code` information if you are currently in that _module_'s directory. You can move to the  _module_'s directory via the [Change Directory](#6-change-directory) Command.
 
 #### Example Usage    
-```
-	// To do
-```
+
+`delc Lecture -m cs2113t` when not in the *module*'s  directory
+
+`delc Lecture` when in the *module*'s directory
 
 #### Expected Outcome    
+
 ```
-	// To do
+root :
+delc Lecture -m cs3235
+Confirm delete Lecture?
+
+root :
+y
+SUCCESS!! Category/Categories have been deleted.
 ```
 
-<br>  
+##### before:
+
+![image-20200401020252025](images/ug_delc_before.png)
+
+##### after:
+
+![image-20200401020313566](images/ug_delc_after.png)  
+
+
 
 #### c. Delete Tasks from your Task List     
-```
-	// To do
-```
+
+Delete a _task_ from your **Task List**. The **Task List** contains all your added _tasks_ in the _category_ and can be viewed via the List Task command.
 
 #### Format  
-```
-	// To do
-```
+
+`delt <task description> -m <module code> -c <category name>`  
+
+- `task description` -- The _description_ of the _task_
+- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
+- `category name` -- The _name_ of the   _category
+
+> **Note**: You need **not** include the `module code` if you are currently in that _module_'s directory. Also, you need **not** include both `module code` and `category name`  if you are currently in that _category_'s directory. You can move to the  the respective directories via the [Change Directory](#6-change-directory) Command. 
 
 #### Example Usage    
-```
-	// To do
-```
+
+`delt urgent assignment -m cs3235 -c Assignment` when not in the *module*'s  directory
+
+`delt urgent assignment -c Assignment` when not in the *category*'s directory
+
+`delt urgent assignment` when in the *category*'s directory
 
 #### Expected Outcome    
+
 ```
-	// To do
+root :
+delt urgent assignment -m cs3235 -c Assignment
+Confirm delete urgent assignment?
+
+root :
+y
+SUCCESS!! Task(s) have been deleted.
 ```
 
-<br><br>  
+##### before:
+
+![image-20200401020857605](images/ug_delt_before.png)
+
+##### after:
+
+![image-20200401021025877](images/ug_delt_after.png)
 
 ## 4. Edit
+
 Edits a _module_, _category_ or _task_ in their respective lists.<br>  
 
 #### a. Edit a Module in your Module List  
@@ -450,42 +534,46 @@ Edits a _module_, _category_ or _task_ in their respective lists.<br>
 <br><br>  
 
 ## 5. Mark a Task as Done  
-Marks a **previously undone** task as *done*.<br>  
-    
-#### Format  
-```
-	// To do
-```
+Marks a task as *done*.
 
+#### Format  
+`done <task description> -m <module code> -c <category name>`  
+
+- `task description` -- The _description_ of the _task_
+- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
+- `category name` -- The _name_ of the   _category_
+    
 #### Example Usage    
 ```
-	// To do
+	done Tutorial 7 -m CS1231 -c Tutorial
 ```
 
 #### Expected Outcome    
+
 ```
-	// To do
+	SUCCESS!! Task has been updated.
 ```
 
 <br><br>  
 
 ## 6. Change Directory 
-Traverse up and down the Directory Tree from your current directory.<br>  
-    
+Traverse up and down the Directory Tree from your current directory.  
+
 #### Format  
-```
-	// To do
-```
+
+`cd <directory name>` to traverse down   
+`cd ..` to traverse up   
+
+- `directory name` -- The name of the next _directory_
+- `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
+- `category name` -- The _name_ of the   _category  
 
 #### Example Usage    
-```
-	// To do
-```
 
-#### Expected Outcome    
-```
-	// To do
-```
+```  
+	cd Assignment
+```  
+
 <br><br>
 
 # Miscellaneous Information  

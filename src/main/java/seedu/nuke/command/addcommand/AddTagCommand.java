@@ -53,7 +53,7 @@ public class AddTagCommand extends Command {
      * @param categoryName
      *  The name of the parent category
      */
-    public AddTagCommand(ArrayList<String> infos, String taskDescription, String moduleCode, String categoryName) {
+    public AddTagCommand(ArrayList<String> infos, String moduleCode, String categoryName, String taskDescription) {
         this.infos = infos;
         this.taskDescription = taskDescription;
         this.moduleCode = moduleCode;

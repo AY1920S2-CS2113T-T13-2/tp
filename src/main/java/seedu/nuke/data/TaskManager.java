@@ -1,6 +1,8 @@
 package seedu.nuke.data;
 
+import seedu.nuke.directory.Category;
 import seedu.nuke.directory.Task;
+import seedu.nuke.directory.TaskFile;
 import seedu.nuke.exception.DataNotFoundException;
 import seedu.nuke.exception.DuplicateDataException;
 import seedu.nuke.util.DateTime;
@@ -185,6 +187,26 @@ public class TaskManager {
     }
 
     /**
+     * Filter for tasks in the Task List with description that contains the specified keyword., then for files in
+     * the File List of the filtered tasks with name that contains the specified file keyword.
+     * Filtering is done in a case-insensitive manner.
+     *
+     * @param taskKeyword
+     *  The keyword to filter the tasks
+     * @param fileKeyword
+     * The keyword to filter the files
+     * @return
+     *  The list of filtered files
+     */
+    public ArrayList<TaskFile> filter(String taskKeyword, String fileKeyword) {
+        ArrayList<TaskFile> filteredFileList = new ArrayList<>();
+        for (Task task : filter(taskKeyword)) {
+            filteredFileList.addAll(task.getFiles().filter(fileKeyword));
+        }
+        return filteredFileList;
+    }
+
+    /**
      * Filter for tasks in the Task List with description that matches <b>exactly</b> the specified keyword.
      * Filtering is done in a case-insensitive manner.
      *
@@ -205,6 +227,27 @@ public class TaskManager {
             if (task.getDescription().toLowerCase().equals(taskKeyword.toLowerCase())) {
                 filteredTaskList.add(task);
             }
+        }
+        return filteredTaskList;
+    }
+
+    /**
+     * Filter for tasks in the Task List with description that that matches <b>exactly</b> the specified task
+     * keyword, then for files in the File List of the filtered files with name that that matches <b>exactly</b>
+     * the specified file keyword.
+     * Filtering is done in a case-insensitive manner.
+     *
+     * @param taskKeyword
+     *  The keyword to filter the tasks
+     * @param fileKeyword
+     *  The keyword to filter the files
+     * @return
+     *  The list of filtered files
+     */
+    public ArrayList<TaskFile> filterExact(String taskKeyword, String fileKeyword) {
+        ArrayList<TaskFile> filteredTaskList = new ArrayList<>();
+        for (Task task : filterExact(taskKeyword)) {
+            filteredTaskList.addAll(task.getFiles().filterExact(fileKeyword));
         }
         return filteredTaskList;
     }

@@ -394,8 +394,7 @@ public class CommandFormatText {
 
     private static TextFlow getHelpFormat() {
         commandFormat.getChildren().addAll(
-                createText(HelpCommand.COMMAND_WORD, Color.GREEN),
-                createText(String.format(" %s %s %s", "[", "<command word>", "]"), Color.DARKGRAY)
+                createText(HelpCommand.COMMAND_WORD, Color.GREEN)
         );
         return commandFormat;
     }

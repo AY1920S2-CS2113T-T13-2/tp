@@ -28,7 +28,8 @@ import static seedu.nuke.util.Message.MESSAGE_EDIT_CATEGORY_SUCCESS;
 public class EditCategoryCommand extends EditCommand {
     public static final String COMMAND_WORD = "edc";
     public static final String FORMAT = COMMAND_WORD
-            + " <category name> -m <module code> [ -c <new category name> -p <new priority> ]";
+            + " <category name> -m <module code> [ -c <new category name> -p <new priority> "
+            + "(must include at least one) ]";
     public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator()
             + "Edit name and priority of category"
             + System.lineSeparator() + FORMAT + System.lineSeparator();

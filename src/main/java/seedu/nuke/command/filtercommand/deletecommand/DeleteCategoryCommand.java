@@ -86,7 +86,8 @@ public class DeleteCategoryCommand extends DeleteCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredCategories = createFilteredCategoryList(moduleCode, categoryName, isExact, isAll);
-        return executeInitialDelete(filteredCategories);
+        ArrayList<Category> filteredCategories = createFilteredCategoryList(moduleCode, categoryName, isExact, isAll);
+        sortCategoryList(filteredCategories);
+        return executeInitialDelete(new ArrayList<>(filteredCategories));
     }
 }

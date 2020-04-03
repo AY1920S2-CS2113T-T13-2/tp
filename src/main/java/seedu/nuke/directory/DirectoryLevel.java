@@ -2,9 +2,9 @@ package seedu.nuke.directory;
 
 public enum DirectoryLevel {
     NONE,
-    FILE,
-    TASK,
-    CATEGORY,
+    ROOT,
     MODULE,
-    ROOT
+    CATEGORY,
+    TASK,
+    FILE
 }

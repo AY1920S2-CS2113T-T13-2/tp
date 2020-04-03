@@ -3,6 +3,7 @@ package seedu.nuke.data;
 import seedu.nuke.directory.Category;
 import seedu.nuke.directory.Module;
 import seedu.nuke.directory.Task;
+import seedu.nuke.directory.TaskFile;
 import seedu.nuke.exception.DataNotFoundException;
 import seedu.nuke.exception.DuplicateDataException;
 
@@ -232,6 +233,29 @@ public class CategoryManager {
     }
 
     /**
+     * Filter for categories in the Category List that contains the specified category keyword, then for tasks in
+     * the Task List of the filtered categories with description that contains the specified task keyword, then for
+     * files in the File List that contains the specified file keyword.
+     * Filtering is done in a case-insensitive manner.
+     *
+     * @param categoryKeyword
+     *  The keyword to filter the categories
+     * @param taskKeyword
+     * The keyword to filter the tasks
+     * @param fileKeyword
+     * The keyword to filter the files
+     * @return
+     *  The list of filtered files
+     */
+    public ArrayList<TaskFile> filter(String categoryKeyword, String taskKeyword, String fileKeyword) {
+        ArrayList<TaskFile> filteredFileList = new ArrayList<>();
+        for (Task task : filter(categoryKeyword, taskKeyword)) {
+            filteredFileList.addAll(task.getFiles().filter(fileKeyword));
+        }
+        return filteredFileList;
+    }
+
+    /**
      * Filter for categories in the Category List with name that matches <b>exactly</b> the specified keyword.
      * Filtering is done in a case-insensitive manner.
      *
@@ -274,6 +298,30 @@ public class CategoryManager {
             filteredTaskList.addAll(category.getTasks().filterExact(taskKeyword));
         }
         return filteredTaskList;
+    }
+
+    /**
+     * Filter for categories in the Category List  with name that that matches <b>exactly</b> the specified category
+     * keyword, then for tasks in the Task List of the filtered categories with description that that matches
+     * <b>exactly</b> the specified task keyword, then for files in the File List of the filtered tasks with name
+     * that matches <b>exactly</b> the specified file keyword.
+     * Filtering is done in a case-insensitive manner.
+     *
+     * @param categoryKeyword
+     *  The keyword to filter the categories
+     * @param taskKeyword
+     *  The keyword to filter the tasks
+     * @param fileKeyword
+     *  The keyword to filter the files
+     * @return
+     *  The list of filtered files
+     */
+    public ArrayList<TaskFile> filterExact(String categoryKeyword, String taskKeyword, String fileKeyword) {
+        ArrayList<TaskFile> filteredFileList = new ArrayList<>();
+        for (Task task : filterExact(categoryKeyword, taskKeyword)) {
+            filteredFileList.addAll(task.getFiles().filterExact(fileKeyword));
+        }
+        return filteredFileList;
     }
 
     public static class CategoryNotFoundException extends DataNotFoundException {

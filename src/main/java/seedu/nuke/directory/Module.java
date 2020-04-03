@@ -127,39 +127,6 @@ public class Module extends Directory {
     }
 
     /**
-     * Get a list of tasks of the module.
-     * @return a list of tasks of the module
-     */
-    public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> allTasks =  new ArrayList<>();
-        for (Category category: categories.getCategoryList()) {
-            allTasks.addAll(category.getTasks().getTaskList());
-        }
-        return allTasks;
-    }
-
-    public int countTasks() {
-        return getAllTasks().size();
-    }
-
-    /**
-     * The method to check the deadline of the tasks in a module.
-     * @return an ArrayList of String representing the deadline of tasks in order.
-     */
-    public ArrayList<Task> sortAllTasks() {
-        ArrayList<Task> filteredTaskList = getAllTasks();
-        Collections.sort(filteredTaskList, new Comparator<Task>() {
-            @Override
-            public int compare(Task t1, Task t2) {
-                String t1Deadline = t1.getDeadline() == null ? "" : t1.getDeadline().getDateTimeSortFormat();
-                String t2Deadline = t2.getDeadline() == null ? "" : t2.getDeadline().getDateTimeSortFormat();
-                return t1Deadline.compareToIgnoreCase(t2Deadline);
-            }
-        });
-        return filteredTaskList;
-    }
-
-    /**
      * Checks if one module has the same module code as another.
      *
      * @param moduleCode
@@ -169,5 +136,17 @@ public class Module extends Directory {
      */
     public boolean isSameModule(String moduleCode) {
         return this.moduleCode.equalsIgnoreCase(moduleCode);
+    }
+
+    /**
+     * Returns a string containing the standard Module attributes.
+     *
+     * @return
+     *  A string containing the standard Module attributes
+     */
+    @Override
+    public String toString() {
+        return String.format("Module Code: %s\nModule Title: %s\nNumber of Categories: %d\n",
+                moduleCode, title, categories.getCategoryList().size());
     }
 }

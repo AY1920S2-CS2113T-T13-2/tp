@@ -145,7 +145,8 @@ public class Decoder {
         } else {
             throw new CorruptedFileException();
         }
-        DateTime deadline = (taskInformation[2].isEmpty()) ? null : DateTimeFormat.stringToDateTime(taskInformation[2]);
+        DateTime deadline = (taskInformation[2].isEmpty()) ? new DateTime() :
+                DateTimeFormat.stringToDateTime(taskInformation[2]);
         int taskPriority = Integer.parseInt(taskInformation[3]);
         Task decodedTask = new Task(decodedCategory, taskDescription, deadline, taskPriority);
         decodedTask.setDone(doneStatus);

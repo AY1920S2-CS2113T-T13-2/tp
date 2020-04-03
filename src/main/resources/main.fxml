@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.effect.InnerShadow?>
@@ -16,34 +14,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox prefHeight="800.0" prefWidth="1400.0" style="-fx-background-color: #bdb2a2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seedu.nuke.gui.controller.MainController">
+<VBox prefHeight="700.0" prefWidth="1250.0" style="-fx-background-color: #bdb2a2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seedu.nuke.gui.controller.MainController">
     <children>
-        <MenuBar>
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
         <VBox prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f0fafa;" VBox.vgrow="ALWAYS">
             <children>
-                <VBox prefHeight="104.0" prefWidth="600.0" style="-fx-background-color: #bfd6db;">
+                <VBox prefHeight="123.0" prefWidth="1200.0" style="-fx-background-color: #bfd6db;">
                     <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
                             <children>
-                        <HBox maxWidth="308.0" prefHeight="94.0" prefWidth="308.0" style="-fx-background-color: #dae7f2; -fx-border-color: #ff621f; -fx-border-width: 3; -fx-border-radius: 7; -fx-background-radius: 10;" HBox.hgrow="SOMETIMES">
+                        <HBox fx:id="overdueBox" maxWidth="308.0" onMouseClicked="#onClickOverdueTask" prefHeight="94.0" prefWidth="305.0" style="-fx-background-color: #dae7f2; -fx-border-color: #ff621f; -fx-border-width: 3; -fx-border-radius: 7; -fx-background-radius: 10;" HBox.hgrow="SOMETIMES">
                            <children>
                               <VBox alignment="CENTER" prefHeight="88.0" prefWidth="131.0" HBox.hgrow="SOMETIMES">
                                  <children>
@@ -71,6 +50,9 @@
                                           </padding>
                                       </VBox>
                            </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </HBox>
                                 <GridPane hgap="5.0" prefHeight="94.0" prefWidth="887.0" HBox.hgrow="SOMETIMES">
                                     <columnConstraints>
@@ -86,7 +68,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <VBox fx:id="mondayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;">
+                                        <VBox fx:id="mondayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;">
                                             <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #f53e2a; -fx-background-radius: 5;">
                                        <children>
@@ -122,8 +104,11 @@
                                        </padding>
                                     </VBox>
                                             </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                         </VBox>
-                              <VBox fx:id="tuesdayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="1">
+                              <VBox fx:id="tuesdayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="1">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #ff8b1f; -fx-background-radius: 5;">
                                        <children>
@@ -159,8 +144,11 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
-                              <VBox fx:id="wednesdayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="2">
+                              <VBox fx:id="wednesdayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="2">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #ffda1f; -fx-background-radius: 5;">
                                        <children>
@@ -196,8 +184,11 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
-                              <VBox fx:id="thursdayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="3">
+                              <VBox fx:id="thursdayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="3">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #8ed65e; -fx-background-radius: 5;">
                                        <children>
@@ -233,8 +224,11 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
-                              <VBox fx:id="fridayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="4">
+                              <VBox fx:id="fridayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="4">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #87cee8; -fx-background-radius: 5;">
                                        <children>
@@ -270,8 +264,11 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
-                              <VBox fx:id="saturdayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="5">
+                              <VBox fx:id="saturdayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="5">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #99aef7; -fx-background-radius: 5;">
                                        <children>
@@ -307,8 +304,11 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
-                              <VBox fx:id="sundayBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="6">
+                              <VBox fx:id="sundayBox" alignment="TOP_CENTER" onMouseClicked="#onClickDailyTask" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: #c1cbd4; -fx-border-radius: 7; -fx-background-color: #dae7f2; -fx-border-width: 3; -fx-background-radius: 10;" GridPane.columnIndex="6">
                                  <children>
                                     <VBox alignment="CENTER" style="-fx-background-color: #d4a4fc; -fx-background-radius: 5;">
                                        <children>
@@ -344,6 +344,9 @@
                                        </padding>
                                     </VBox>
                                  </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </VBox>
                                     </children>
                                 </GridPane>
@@ -356,7 +359,7 @@
                 </VBox>
                 <HBox prefHeight="463.0" prefWidth="600.0" spacing="5.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <VBox fx:id="directoryBox" alignment="TOP_CENTER" prefHeight="661.0" prefWidth="308.0" spacing="2.0" style="-fx-border-color: #a5c6d4; -fx-border-radius: 5; -fx-background-color: #f2fafc; -fx-background-radius: 10; -fx-border-width: 2;" HBox.hgrow="SOMETIMES">
+                        <VBox fx:id="directoryBox" alignment="TOP_CENTER" prefHeight="561.0" prefWidth="305.0" spacing="2.0" style="-fx-border-color: #a5c6d4; -fx-border-radius: 5; -fx-background-color: #f2fafc; -fx-background-radius: 10; -fx-border-width: 2;" HBox.hgrow="SOMETIMES">
                             <children>
                                 <Label alignment="TOP_CENTER" text="DIRECTORY LIST" textFill="#403c39">
                                     <font>
@@ -396,9 +399,9 @@
                            </padding>
                         </VBox>
                         <Separator prefWidth="200.0" />
-                                <ScrollPane fx:id="consoleScreenScrollPane" fitToWidth="true" prefHeight="510.0" prefWidth="1077.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                                <ScrollPane fx:id="consoleScreenScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="510.0" prefWidth="1077.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                                     <content>
-                                        <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="536.0" prefWidth="1063.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: #fafeff; -fx-background-radius: 10;">
+                                        <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="600.0" prefWidth="866.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: #fafeff; -fx-background-radius: 10;">
                                             <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                             </padding>

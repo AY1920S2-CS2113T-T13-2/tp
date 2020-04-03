@@ -31,6 +31,7 @@ public class MarkAsDoneCommand extends EditCommand {
             + "(?<categoryName>(?:\\s+" + CATEGORY_PREFIX + "(?:\\s+\\w\\S*)+)?)"
             + "(?<invalid>(?:\\s+-.*)*)"
     );
+
     private String moduleCode;
     private String categoryName;
     private String taskDescription;

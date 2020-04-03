@@ -44,17 +44,31 @@ public class GuiExecutor {
     }
 
     /**
+     * Shows a message on the console screen to the user.
+     *
+     * @param message
+     *  The message to show
+     */
+    public void showMessage(String message) {
+        if (!message.isEmpty()) {
+            Text feedbackToUser = TextUtil.createText(String.format("\n\n%s", message), Color.NAVY);
+            consoleScreen.getChildren().add(feedbackToUser);
+        }
+    }
+
+    /**
      * Displays the result on the console screen to the user.
      *
      * @param result
      *  The result from executing the command
      */
     private void displayResult(CommandResult result) {
-        if (result.getFeedbackToUser().isEmpty()) {
+        if (result.getFeedbackToUser() == null) {
             return;
         }
-        Text feedbackToUser = TextUtil.createText(String.format("%s\n\n", result.getFeedbackToUser()), Color.BLUE);
-        consoleScreen.getChildren().add(feedbackToUser);
+        if (!result.getFeedbackToUser().isEmpty()) {
+            showMessage(result.getFeedbackToUser());
+        }
 
         DirectoryLevel dataType = result.getDirectoryLevel();
         String listTableToShow;
@@ -87,11 +101,19 @@ public class GuiExecutor {
             listTableToShow = ListCreator.createFileListTable(fileList);
             break;
 
+        case NONE:
+            if (result.getHelpGuide() == null) {
+                return;
+            }
+            ArrayList<String> helpList = result.getHelpGuide();
+            listTableToShow = ListCreator.createGeneralListTable(helpList);
+            break;
+
         default:
             return;
         }
 
-        Text taskListTable = TextUtil.createText(String.format("%s\n\n", listTableToShow), Color.DEEPSKYBLUE);
+        Text taskListTable = TextUtil.createText(String.format("\n%s", listTableToShow), Color.MIDNIGHTBLUE);
         consoleScreen.getChildren().add(taskListTable);
     }
 

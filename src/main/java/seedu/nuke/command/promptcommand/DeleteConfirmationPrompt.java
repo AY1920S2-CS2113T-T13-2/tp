@@ -289,7 +289,7 @@ public class DeleteConfirmationPrompt extends Command {
     private boolean isCurrentDirectoryInList(ArrayList<Directory> filteredList)
             throws IncorrectDirectoryLevelException {
         // Current directory is of a higher level than the directories to be deleted
-        if (DirectoryTraverser.getCurrentDirectoryLevel().ordinal() > directoryLevel.ordinal()) {
+        if (DirectoryTraverser.getCurrentDirectoryLevel().ordinal() < directoryLevel.ordinal()) {
             return false;
         }
         // Checks if current directory or parent directory is to be deleted

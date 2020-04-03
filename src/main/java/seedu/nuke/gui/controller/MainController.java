@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -35,6 +37,7 @@ import static seedu.nuke.util.Message.MESSAGE_WELCOME_2;
 public class MainController implements Initializable {
 
     /* Daily Task Counter Panel components */
+    public HBox overdueBox;
     public Label overdueTaskCount;
     public VBox mondayBox;
     public Label mondayTaskCount;
@@ -86,7 +89,7 @@ public class MainController implements Initializable {
         consoleScreenScrollPane.vvalueProperty().bind(consoleScreen.heightProperty());
         consoleScreen.setStyle("-fx-font-family: Consolas; -fx-font-size: 12pt");
 
-        directoryTree = new DirectoryTree();
+        directoryTree = new DirectoryTree(consoleScreen);
         syntaxConsole = new SyntaxConsole();
         console = new AutoCompleteTextField();
         directoryPathLabel.setTextFill(Color.BLACK);
@@ -177,5 +180,14 @@ public class MainController implements Initializable {
         new DailyTaskCounter(fridayBox, fridayTaskCount, fridayDate, DayOfWeek.FRIDAY).setDailyTaskCount();
         new DailyTaskCounter(saturdayBox, saturdayTaskCount, saturdayDate, DayOfWeek.SATURDAY).setDailyTaskCount();
         new DailyTaskCounter(sundayBox, sundayTaskCount, sundayDate, DayOfWeek.SUNDAY).setDailyTaskCount();
+    }
+
+    @FXML
+    private void onClickDailyTask(MouseEvent mouseEvent) {
+        DailyTaskCounter.onClickDailyTask(mouseEvent, consoleScreen);
+    }
+
+    public void onClickOverdueTask(MouseEvent mouseEvent) {
+        DailyTaskCounter.onClickOverdueTask(mouseEvent, consoleScreen);
     }
 }

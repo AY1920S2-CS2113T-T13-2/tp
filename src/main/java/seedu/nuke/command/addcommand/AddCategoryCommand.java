@@ -67,6 +67,10 @@ public class AddCategoryCommand extends AddCommand {
         this(moduleCode, categoryName, 0);
     }
 
+    private boolean exceedLengthLimit() {
+        return categoryName.length() <= 15;
+    }
+
     /**
      * Executes the <b>Add Category Command</b> to add a <b>Category</b> into the <b>Category List</b>.
      *
@@ -77,6 +81,9 @@ public class AddCategoryCommand extends AddCommand {
     @Override
     public CommandResult execute() {
         try {
+            if (exceedLengthLimit()) {
+              //
+            }
             Module parentModule = DirectoryTraverser.getModuleDirectory(moduleCode);
             Category toAdd = new Category(parentModule, categoryName, categoryPriority);
             parentModule.getCategories().add(toAdd);

@@ -2,16 +2,16 @@ package seedu.nuke.command.filtercommand.listcommand;
 
 import seedu.nuke.command.CommandResult;
 import seedu.nuke.data.ModuleManager;
+import seedu.nuke.directory.DirectoryLevel;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Module;
 import seedu.nuke.directory.Task;
 import seedu.nuke.exception.IncorrectDirectoryLevelException;
 import seedu.nuke.util.ExceptionMessage;
-import seedu.nuke.util.ListCreator;
 
 import java.util.ArrayList;
 
-import static seedu.nuke.util.Message.MESSAGE_NO_TASK_IN_LIST;
+import static seedu.nuke.util.Message.MESSAGE_NO_TASKS_TO_SHOW;
 import static seedu.nuke.util.Message.messageTaskSuccessfullyList;
 
 
@@ -25,9 +25,8 @@ public class ListModuleTasksDeadlineCommand extends ListCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator()
             + "List tasks of module in ascending order of deadline" + System.lineSeparator()
             + FORMAT + System.lineSeparator();
-    public static final int EMPTY = 0;
+
     private String moduleCode;
-    private String deadlines;
 
     public ListModuleTasksDeadlineCommand(String moduleCode) {
         this.moduleCode = moduleCode;
@@ -36,14 +35,16 @@ public class ListModuleTasksDeadlineCommand extends ListCommand {
     @Override
     public CommandResult execute() {
         try {
+            final String noKeyword = "";
             Module module = DirectoryTraverser.getModuleDirectory(moduleCode);
-            ArrayList<Task> filteredTaskList = module.sortAllTasks();
-            if (filteredTaskList.size() == EMPTY) {
-                return new CommandResult(MESSAGE_NO_TASK_IN_LIST);
+            ArrayList<Task> filteredTaskList = ModuleManager.filterExact(module.getModuleCode(), noKeyword, noKeyword);
+            sortTaskList(filteredTaskList, true, false);
+            if (filteredTaskList.isEmpty()) {
+                return new CommandResult(MESSAGE_NO_TASKS_TO_SHOW);
             }
-            assert filteredTaskList.size() != EMPTY : "make sure there are some tasks in the list";
-            deadlines = ListCreator.createTaskListTable(new ArrayList<>(filteredTaskList), true);
-            return new CommandResult(messageTaskSuccessfullyList(ModuleManager.countAllTasks()) + deadlines);
+            assert filteredTaskList.isEmpty() : "make sure there are some tasks in the list";
+            return new CommandResult(messageTaskSuccessfullyList(filteredTaskList.size()),
+                    DirectoryLevel.TASK, new ArrayList<>(filteredTaskList));
         } catch (IncorrectDirectoryLevelException e) {
             return new CommandResult(ExceptionMessage.MESSAGE_INCORRECT_DIRECTORY_LEVEL);
         } catch (ModuleManager.ModuleNotFoundException e) {

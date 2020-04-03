@@ -95,8 +95,9 @@ public class DeleteFileCommand extends DeleteCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredFiles =
+        ArrayList<TaskFile> filteredFiles =
                 createFilteredFileList(moduleCode, categoryName, taskDescription, fileName, isExact, isAll);
-        return executeInitialDelete(filteredFiles);
+        sortFileList(filteredFiles);
+        return executeInitialDelete(new ArrayList<>(filteredFiles));
     }
 }

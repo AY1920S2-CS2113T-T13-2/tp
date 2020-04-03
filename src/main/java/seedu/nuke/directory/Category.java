@@ -24,13 +24,6 @@ public class Category extends Directory {
         this.tasks = new TaskManager();
     }
 
-    //public Category(Module parentModule, String categoryName, int categoryPriority, TaskManager tasks) {
-    //    super(parentModule);
-    //    this.categoryName = categoryName;
-    //    this.categoryPriority = categoryPriority;
-    //    this.tasks = tasks;
-    //}
-
     /**
      * Returns the name of the category.
      *
@@ -106,5 +99,17 @@ public class Category extends Directory {
      */
     public boolean isSameCategory(String categoryName) {
         return this.categoryName.equals(categoryName);
+    }
+
+    /**
+     * Returns a string containing the standard Category attributes.
+     *
+     * @return
+     *  A string containing the standard Category attributes
+     */
+    @Override
+    public String toString() {
+        return String.format("Category Name: %s\nModule Code: %s\nPriority: %d\nNumber of Tasks: %d\n",
+                categoryName, getParent().getModuleCode(), categoryPriority, tasks.getTaskList().size());
     }
 }

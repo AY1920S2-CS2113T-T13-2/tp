@@ -33,7 +33,6 @@ public class Message {
 
     public static final String MESSAGE_WELCOME_1 = "Welcome to NUKE";
     public static final String MESSAGE_WELCOME_2 = "What can I do for you?";
-    public static final String MESSAGE_NO_TASK_IN_LIST = "There is no task in the list!\n";
 
     public static String messageTaskSuccessfullyList(int taskCount) {
         return String.format("There are (is) %d task(s) in the list!\n", taskCount);
@@ -43,7 +42,11 @@ public class Message {
     public static final String MESSAGE_EXIT = "Bye. Hope to see you again soon.";
     public static final String DIVIDER = "-".repeat(100);
 
-    public static final String MESSAGE_SHOW_LIST = "Here are what you are looking for...\n";
+    public static final String MESSAGE_SHOW_LIST = "";
+    public static final String MESSAGE_NO_MODULES_TO_SHOW = "There are no modules to show.\n";
+    public static final String MESSAGE_NO_CATEGORIES_TO_SHOW = "There are no categories to show.\n";
+    public static final String MESSAGE_NO_TASKS_TO_SHOW = "There are no tasks to show.\n";
+    public static final String MESSAGE_NO_FILES_TO_SHOW = "There are no files to show.\n";
 
     public static final String MESSAGE_NO_MODULES_FOUND = "Sorry. No modules found.\n";
     public static final String MESSAGE_NO_CATEGORIES_FOUND = "Sorry. No categories found.\n";
@@ -253,7 +256,7 @@ public class Message {
      *  The message to confirm deletion of files
      */
     public static String messageConfirmDeleteFile(ArrayList<TaskFile> filteredFiles,
-          ArrayList<Integer> toDeleteIndices) {
+                                                  ArrayList<Integer> toDeleteIndices) {
         StringBuilder promptMessage = new StringBuilder();
         promptMessage.append("Confirm delete these files?\n");
         for (int index : toDeleteIndices) {
@@ -284,6 +287,8 @@ public class Message {
     public static final String MESSAGE_INVALID_DELETE_INDICES = "Deletion aborted due to invalid index provided.\n";
     public static final String MESSAGE_ILLEGAL_DELETE =
             "Attempting to delete the current or its parent's directory.\nMove out of the directory first.\n";
+
+    public static final String MESSAGE_INVALID_TIME_SPECIFIER = "Alert! Invalid time specifier.\n";
 
     public static final String MESSAGE_EDIT_MODULE_SUCCESS = "SUCCESS!! Module has been updated.\n";
     public static final String MESSAGE_EDIT_CATEGORY_SUCCESS = "SUCCESS!! Category has been updated.\n";

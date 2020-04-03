@@ -16,7 +16,7 @@ import seedu.nuke.directory.Root;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class InfiNus extends Application {
+public class InfiNuke extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -27,17 +27,17 @@ public class InfiNus extends Application {
         // Load modules and tasks
         HashMap<String, String> modulesMap = ModuleLoader.load(StoragePath.NUS_MODULE_LIST_PATH);
         StorageManager storageManager = new StorageManager(StoragePath.SAVE_PATH);
-        ModuleManager.getInstance(new Root(), modulesMap);
+        ModuleManager.initialise(modulesMap);
         storageManager.loadList();
         Executor.setIsGui();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("INFI-NUS");
+        stage.setTitle("INFI-NUKE");
         stage.getIcons().add(new Image("images/venus_icon.png"));
-        stage.setMinWidth(1400);
-        stage.setMinHeight(800);
+        stage.setMinWidth(1250);
+        stage.setMinHeight(700);
 
         FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main.fxml"));
         Parent mainRoot = sceneLoader.load();

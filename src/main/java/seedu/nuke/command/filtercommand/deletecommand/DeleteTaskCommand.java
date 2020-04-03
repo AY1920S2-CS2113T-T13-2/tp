@@ -92,8 +92,9 @@ public class DeleteTaskCommand extends DeleteCommand {
      */
     @Override
     public CommandResult execute() {
-        ArrayList<Directory> filteredTasks =
+        ArrayList<Task> filteredTasks =
                 createFilteredTaskList(moduleCode, categoryName, taskDescription, isExact, isAll);
-        return executeInitialDelete(filteredTasks);
+        sortTaskList(filteredTasks, false, false);
+        return executeInitialDelete(new ArrayList<>(filteredTasks));
     }
 }

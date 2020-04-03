@@ -6,14 +6,10 @@ package seedu.nuke.command;
  * @see Command
  */
 public class IncorrectCommand extends Command {
-    private final String feedbackToUSer; // Message to be shown to the user
+    private final String feedbackToUser; // Message to be shown to the user
 
     public IncorrectCommand(String message) {
-        this.feedbackToUSer = message;
-    }
-
-    public String getFeedbackToUSer() {
-        return feedbackToUSer;
+        this.feedbackToUser = message;
     }
 
     /**
@@ -25,6 +21,6 @@ public class IncorrectCommand extends Command {
      */
     @Override
     public CommandResult execute() {
-        return new CommandResult(feedbackToUSer);
+        return new CommandResult(feedbackToUser);
     }
 }
