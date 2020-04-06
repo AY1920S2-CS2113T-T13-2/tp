@@ -3,6 +3,7 @@ package seedu.nuke.command.editcommand;
 import seedu.nuke.command.Command;
 import seedu.nuke.command.CommandResult;
 import seedu.nuke.data.ModuleManager;
+import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Module;
 import seedu.nuke.exception.IncorrectDirectoryLevelException;
@@ -64,7 +65,7 @@ public class EditModuleCommand extends EditCommand {
         try {
             Module toEdit = DirectoryTraverser.getModuleDirectory(oldModuleCode);
             ModuleManager.edit(toEdit, newModuleCode);
-
+            StorageManager.setIsSave();
             return new CommandResult(MESSAGE_EDIT_MODULE_SUCCESS);
         }  catch (ModuleNotProvidedException e) {
             return new CommandResult(MESSAGE_MODULE_NOT_PROVIDED);

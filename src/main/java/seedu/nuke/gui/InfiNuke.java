@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 import seedu.nuke.Executor;
 import seedu.nuke.data.ModuleLoader;
 import seedu.nuke.data.ModuleManager;
+import seedu.nuke.data.ScreenShotManager;
 import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.data.storage.StoragePath;
-import seedu.nuke.directory.Root;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,6 +29,7 @@ public class InfiNuke extends Application {
         StorageManager storageManager = new StorageManager(StoragePath.SAVE_PATH);
         ModuleManager.initialise(modulesMap);
         storageManager.loadList();
+        ScreenShotManager.initialise();
         Executor.setIsGui();
     }
 

@@ -1,25 +1,8 @@
 package seedu.nuke.gui.component;
 
 import javafx.geometry.Insets;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
-import seedu.nuke.command.ChangeDirectoryCommand;
-import seedu.nuke.command.ExitCommand;
-import seedu.nuke.command.HelpCommand;
-import seedu.nuke.command.addcommand.AddCategoryCommand;
-import seedu.nuke.command.addcommand.AddModuleCommand;
-import seedu.nuke.command.addcommand.AddTaskCommand;
-import seedu.nuke.command.editcommand.EditCategoryCommand;
-import seedu.nuke.command.editcommand.EditModuleCommand;
-import seedu.nuke.command.editcommand.EditTaskCommand;
-import seedu.nuke.command.filtercommand.deletecommand.DeleteCategoryCommand;
-import seedu.nuke.command.filtercommand.deletecommand.DeleteModuleCommand;
-import seedu.nuke.command.filtercommand.deletecommand.DeleteTaskCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListCategoryCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListModuleCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListTaskCommand;
 import seedu.nuke.gui.util.CommandFormatText;
-import seedu.nuke.gui.util.TextUtil;
 
 public class SyntaxConsole extends TextFlow {
 

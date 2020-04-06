@@ -85,6 +85,6 @@ public class Encoder {
     }
 
     private String getFileInformation(TaskFile file) {
-        return String.join(DELIMITER, file.getFileName(), file.getFilePath());
+        return String.join(DELIMITER, file.getFileName(), file.getFilePath(), file.getOriginalFilePath());
     }
 }

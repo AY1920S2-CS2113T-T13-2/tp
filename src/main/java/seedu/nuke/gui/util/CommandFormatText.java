@@ -2,11 +2,11 @@ package seedu.nuke.gui.util;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
-import seedu.nuke.command.ChangeDirectoryCommand;
+import seedu.nuke.command.misc.ChangeDirectoryCommand;
 import seedu.nuke.command.ExitCommand;
 import seedu.nuke.command.HelpCommand;
-import seedu.nuke.command.OpenFileCommand;
-import seedu.nuke.command.UndoCommand;
+import seedu.nuke.command.misc.OpenFileCommand;
+import seedu.nuke.command.misc.UndoCommand;
 import seedu.nuke.command.addcommand.AddCategoryCommand;
 import seedu.nuke.command.addcommand.AddFileCommand;
 import seedu.nuke.command.addcommand.AddModuleCommand;
@@ -21,7 +21,7 @@ import seedu.nuke.command.filtercommand.deletecommand.DeleteCategoryCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteFileCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteModuleCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteTaskCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListAllTasksDeadlineCommand;
+import seedu.nuke.command.filtercommand.listcommand.ListTaskSortedCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListCategoryCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListFileCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListModuleCommand;
@@ -82,7 +82,7 @@ public class CommandFormatText {
             return getListTaskFormat();
         case ListFileCommand.COMMAND_WORD:
             return getListFileFormat();
-        case ListAllTasksDeadlineCommand.COMMAND_WORD:
+        case ListTaskSortedCommand.COMMAND_WORD:
             return getListTaskDeadlineFormat();
         case ListModuleTasksDeadlineCommand.COMMAND_WORD:
             return getListModuleTaskDeadlineFormat();
@@ -274,7 +274,7 @@ public class CommandFormatText {
 
     private static TextFlow getListTaskDeadlineFormat() {
         commandFormat.getChildren().add(
-                createText(ListAllTasksDeadlineCommand.COMMAND_WORD, Color.GREEN)
+                createText(ListTaskSortedCommand.COMMAND_WORD, Color.GREEN)
         );
         return commandFormat;
     }

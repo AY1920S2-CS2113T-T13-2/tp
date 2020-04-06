@@ -3,11 +3,11 @@ package seedu.nuke.gui.io;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import seedu.nuke.Executor;
-import seedu.nuke.command.ChangeDirectoryCommand;
+import seedu.nuke.command.misc.ChangeDirectoryCommand;
 import seedu.nuke.command.ExitCommand;
 import seedu.nuke.command.HelpCommand;
-import seedu.nuke.command.OpenFileCommand;
-import seedu.nuke.command.UndoCommand;
+import seedu.nuke.command.misc.OpenFileCommand;
+import seedu.nuke.command.misc.UndoCommand;
 import seedu.nuke.command.addcommand.AddCategoryCommand;
 import seedu.nuke.command.addcommand.AddFileCommand;
 import seedu.nuke.command.addcommand.AddModuleCommand;
@@ -22,7 +22,7 @@ import seedu.nuke.command.filtercommand.deletecommand.DeleteCategoryCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteFileCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteModuleCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteTaskCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListAllTasksDeadlineCommand;
+import seedu.nuke.command.filtercommand.listcommand.ListTaskSortedCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListCategoryCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListFileCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListModuleCommand;
@@ -115,7 +115,7 @@ public class GuiParser {
             EditFileCommand.COMMAND_WORD, MarkAsDoneCommand.COMMAND_WORD, ChangeDirectoryCommand.COMMAND_WORD,
             OpenFileCommand.COMMAND_WORD, UndoCommand.COMMAND_WORD, ExitCommand.COMMAND_WORD, HelpCommand.COMMAND_WORD,
             AddTagCommand.COMMAND_WORD, ListModuleTasksDeadlineCommand.COMMAND_WORD,
-            ListAllTasksDeadlineCommand.COMMAND_WORD, GENERIC_ADD_COMMAND, GENERIC_DELETE_COMMAND, GENERIC_LIST_COMMAND
+            ListTaskSortedCommand.COMMAND_WORD, GENERIC_ADD_COMMAND, GENERIC_DELETE_COMMAND, GENERIC_LIST_COMMAND
     ));
 
     /**
@@ -188,7 +188,7 @@ public class GuiParser {
         case GENERIC_LIST_COMMAND:
         case AddTagCommand.COMMAND_WORD:
         case ListModuleTasksDeadlineCommand.COMMAND_WORD:
-        case ListAllTasksDeadlineCommand.COMMAND_WORD:
+        case ListTaskSortedCommand.COMMAND_WORD:
             highlightedInput.getChildren().add(createText(parameters, Color.BLUE));
             break;
 

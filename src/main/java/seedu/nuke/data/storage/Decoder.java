@@ -158,6 +158,7 @@ public class Decoder {
     private TaskFile decodeFile(Task decodedTask, String[] fileInformation) {
         String fileName = fileInformation[0];
         String filePath = fileInformation[1];
-        return new TaskFile(decodedTask, fileName, filePath);
+        String originalFilePath = fileInformation[2];
+        return new TaskFile(decodedTask, fileName, filePath, originalFilePath);
     }
 }

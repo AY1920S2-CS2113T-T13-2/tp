@@ -17,8 +17,8 @@ repositories {
 dependencies {
     //config the jar to Mavern library
     implementation 'org.fusesource.jansi:jansi:1.18'
-    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.alibaba:fastjson:1.2.12'
+    implementation 'org.apache.commons:commons-io:1.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.0'
     String javaFxVersion = '11'
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
@@ -50,7 +50,7 @@ test {
 }
 
 application {
-    mainClassName = "seedu.nuke.gui.Launcher"
+    mainClassName = "seedu.nuke.Nuke"
 }
 
 shadowJar {

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -13,8 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import seedu.nuke.data.storage.StorageManager;
-import seedu.nuke.data.storage.StoragePath;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.gui.component.AutoCompleteTextField;
 import seedu.nuke.gui.component.DailyTaskCounter;
@@ -22,11 +21,14 @@ import seedu.nuke.gui.component.DirectoryTree;
 import seedu.nuke.gui.component.SyntaxConsole;
 import seedu.nuke.gui.io.GuiExecutor;
 import seedu.nuke.gui.io.GuiParser;
+import seedu.nuke.gui.io.InputHistory;
 import seedu.nuke.gui.util.TextUtil;
 
 import java.net.URL;
 import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import static seedu.nuke.util.Message.DIVIDER;
 import static seedu.nuke.util.Message.MESSAGE_LOGO;
@@ -80,8 +82,7 @@ public class MainController implements Initializable {
     @FXML
     private ScrollPane consoleScreenScrollPane;
 
-
-
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -89,7 +90,7 @@ public class MainController implements Initializable {
         consoleScreenScrollPane.vvalueProperty().bind(consoleScreen.heightProperty());
         consoleScreen.setStyle("-fx-font-family: Consolas; -fx-font-size: 12pt");
 
-        directoryTree = new DirectoryTree(consoleScreen);
+        directoryTree = new DirectoryTree(consoleScreen, directoryPathLabel);
         syntaxConsole = new SyntaxConsole();
         console = new AutoCompleteTextField();
         directoryPathLabel.setTextFill(Color.BLACK);
@@ -128,8 +129,8 @@ public class MainController implements Initializable {
 
     private void onSubmitInput(ActionEvent actionEvent) {
         String userInput = console.getText().trim();
+        InputHistory.add(userInput);
         new GuiExecutor(consoleScreen).executeAction(userInput);
-        new StorageManager(StoragePath.SAVE_PATH).saveList();
         refreshScene();
     }
 
@@ -141,26 +142,28 @@ public class MainController implements Initializable {
      *  The key type / press event
      */
     public void onKeyType(KeyEvent keyEvent) {
-        // Remove unnecessary action
+        // Add currently pressed keys
+        if (keyEvent.getEventType() == KeyEvent.KEY_PRESSED) {
+            pressedKeys.add(keyEvent.getCode());
+        }
+        // Remove released keys
         if (keyEvent.getEventType() == KeyEvent.KEY_RELEASED) {
+            pressedKeys.remove(keyEvent.getCode());
             keyEvent.consume();
             return;
         }
 
-        switch (keyEvent.getCode()) {
-        case UP:
+        if (keyEvent.isControlDown() && pressedKeys.contains(KeyCode.UP)) {
+            String previousInput = InputHistory.previous();
+            console.setText(previousInput);
             keyEvent.consume();
-            System.out.println("View last command.");
-            break;
-        case DOWN:
-            System.out.println("View earlier command.");
-            break;
-        case TAB:
+        } else if (keyEvent.isControlDown() && pressedKeys.contains(KeyCode.DOWN)) {
+            String nextInput = InputHistory.next();
+            console.setText(nextInput);
             keyEvent.consume();
+        } else if (keyEvent.getCode() == KeyCode.TAB) {
             syntaxConsole.showCommandFormat(console.getText());
-            break;
-        default:
-            break;
+            keyEvent.consume();
         }
     }
 

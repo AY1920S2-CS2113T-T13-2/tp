@@ -133,6 +133,11 @@ public class Task extends Directory implements Tag {
         return (Category) this.parent;
     }
 
+    @Override
+    public DirectoryLevel getLevel() {
+        return DirectoryLevel.TASK;
+    }
+
     /**
      * Checks if one task has the same description as another.
      *

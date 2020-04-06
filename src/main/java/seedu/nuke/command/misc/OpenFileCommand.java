@@ -1,5 +1,7 @@
-package seedu.nuke.command;
+package seedu.nuke.command.misc;
 
+import seedu.nuke.command.Command;
+import seedu.nuke.command.CommandResult;
 import seedu.nuke.command.filtercommand.FilterCommand;
 import seedu.nuke.data.CategoryManager;
 import seedu.nuke.data.ModuleManager;
@@ -18,12 +20,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
+import static seedu.nuke.data.storage.StoragePath.TASK_FILE_DIRECTORY_PATH;
 import static seedu.nuke.parser.Parser.CATEGORY_PREFIX;
 import static seedu.nuke.parser.Parser.MODULE_PREFIX;
 import static seedu.nuke.parser.Parser.TASK_PREFIX;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_CATEGORY_NOT_FOUND;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_IO_EXCEPTION;
-import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_NOT_FOUND;
+import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_NOT_FOUND_OPEN;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_INCORRECT_DIRECTORY_LEVEL;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_MODULE_NOT_FOUND;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_TASK_FILE_NOT_FOUND;
@@ -42,6 +45,9 @@ public class OpenFileCommand extends FilterCommand {
     public static final String COMMAND_WORD = "open";
     public static final String FORMAT = COMMAND_WORD + " [ <file name> ] -m <module code> "
             + "-c <category name> -t <task description>";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator()
+            + "Open the file(s) of a specified task"
+            + System.lineSeparator() + FORMAT + System.lineSeparator();
     public static final Pattern REGEX_FORMAT = Pattern.compile(
             "(?<identifier>(?:\\s+\\w\\S*)*)"
             + "(?<moduleCode>(?:\\s+" + MODULE_PREFIX + "(?:\\s+\\w\\S*)+)?)"
@@ -108,18 +114,27 @@ public class OpenFileCommand extends FilterCommand {
         }
         Desktop desktop = Desktop.getDesktop();
 
+        ArrayList<String> nonExistentFiles = new ArrayList<>();
+
         for (TaskFile file : filesToOpen) {
-            File[] filesInDirectory = new File(file.getFilePath()).listFiles();
+            String filePath = String.format("%s/%s",  TASK_FILE_DIRECTORY_PATH, file.getFilePath());
+            File[] filesInDirectory = new File(filePath).listFiles();
             if (filesInDirectory == null || filesInDirectory.length == 0) {
-                throw new FileNotFoundException();
+                nonExistentFiles.add(file.getFileName());
+                continue;
             }
             // Get the first file in the list
             File toOpen = filesInDirectory[0];
             if (!toOpen.exists() || !toOpen.isFile()) {
-                throw new FileNotFoundException();
+                nonExistentFiles.add(file.getFileName());
             } else {
                 desktop.open(toOpen);
             }
+        }
+
+        if (!nonExistentFiles.isEmpty()) {
+            String fileNames = String.join(", ", nonExistentFiles);
+            throw new FileNotFoundException(fileNames);
         }
     }
 
@@ -151,7 +166,7 @@ public class OpenFileCommand extends FilterCommand {
         } catch (IncorrectDirectoryLevelException e) {
             return new CommandResult(MESSAGE_INCORRECT_DIRECTORY_LEVEL);
         } catch (FileNotFoundException e) {
-            return new CommandResult(MESSAGE_FILE_NOT_FOUND);
+            return new CommandResult(String.format("%s%s\n", MESSAGE_FILE_NOT_FOUND_OPEN, e.getMessage()));
         } catch (IOException e) {
             return new CommandResult(MESSAGE_FILE_IO_EXCEPTION);
         }

@@ -39,6 +39,11 @@ public class Message {
     }
 
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format!\n";
+    public static final String MESSAGE_UNKNOWN_COMMAND_WORD =
+            "Sorry, the command word at the start of your input is unrecognised.\n";
+    public static final String MESSAGE_EXTRA_PARAMETERS =
+            "There seems to be some extra parameters in the command.\n"
+            + "Please check the command format again or enter help to find out more.\n";
     public static final String MESSAGE_EXIT = "Bye. Hope to see you again soon.";
     public static final String DIVIDER = "-".repeat(100);
 
@@ -47,6 +52,10 @@ public class Message {
     public static final String MESSAGE_NO_CATEGORIES_TO_SHOW = "There are no categories to show.\n";
     public static final String MESSAGE_NO_TASKS_TO_SHOW = "There are no tasks to show.\n";
     public static final String MESSAGE_NO_FILES_TO_SHOW = "There are no files to show.\n";
+
+    public static final String MESSAGE_DEADLINE_OR_PRIORITY =
+            "Please choose either to sort by deadline or priority.\n";
+
 
     public static final String MESSAGE_NO_MODULES_FOUND = "Sorry. No modules found.\n";
     public static final String MESSAGE_NO_CATEGORIES_FOUND = "Sorry. No categories found.\n";
@@ -59,6 +68,10 @@ public class Message {
 
     public static final String MESSAGE_TAG_ADDED = "Tag added!";
 
+    public static final String MESSAGE_CATEGORY_EXCEED_LIMIT =
+            "Sorry, the category name cannot exceed 15 characters.\n";
+    public static final String MESSAGE_TASK_EXCEED_LIMIT = "Sorry, the task description cannot exceed 25 characters.\n";
+    public static final String MESSAGE_FILE_EXCEED_LIMIT = "Sorry, the file name cannot exceed 30 characters.\n";
 
     public static String messageAddModuleSuccess(String moduleCode, String title) {
         return String.format("SUCCESS!! Module %s %s has been added.\n", moduleCode, title);
@@ -295,7 +308,8 @@ public class Message {
     public static final String MESSAGE_EDIT_TASK_SUCCESS = "SUCCESS!! Task has been updated.\n";
     public static final String MESSAGE_NO_EDIT = "There is nothing to edit.\n";
 
-    public static final String MESSAGE_UNDO_SUCCESS = "SUCCESS!! Data has been reverted to last state.\n";
+    public static final String MESSAGE_REDO_SUCCESS = "SUCCESS!! Data has been reverted back to next state.\n";
+    public static final String MESSAGE_UNDO_SUCCESS = "SUCCESS!! Data has been reverted to previous state.\n";
 
     public static final String MESSAGE_OPEN_FILE_SUCCESS = "SUCCESS!! The files are opening now...\n";
     public static final String MESSAGE_NO_FILE_CHOSEN = "No file was chosen.\n";

@@ -1,6 +1,5 @@
 package seedu.nuke.gui.component;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -10,8 +9,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
+import seedu.nuke.command.misc.ChangeDirectoryCommand;
+import seedu.nuke.command.misc.InfoCommand;
 import seedu.nuke.data.ModuleManager;
 import seedu.nuke.directory.Category;
+import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Module;
 import seedu.nuke.directory.Task;
 import seedu.nuke.gui.io.GuiExecutor;
@@ -23,13 +25,15 @@ import java.util.Comparator;
 public class DirectoryTree extends TreeView<Label> {
 
     private TextFlow consoleScreen;
+    private Label directoryPathLabel;
 
     /**
      * Constructs the Directory Tree class.
      */
-    public DirectoryTree(TextFlow consoleScreen) {
+    public DirectoryTree(TextFlow consoleScreen, Label directoryPathLabel) {
         super();
         this.consoleScreen = consoleScreen;
+        this.directoryPathLabel = directoryPathLabel;
 
         setStyle("-fx-font-family: Consolas; -fx-font-size: 11pt; -fx-font-weight: bold; "
                 + "-fx-focus-color: transparent; -fx-faint-focus-color: transparent; "
@@ -63,7 +67,7 @@ public class DirectoryTree extends TreeView<Label> {
                 TreeItem<Label> categoryItem = new TreeItem<>();
                 styleTreeItem(categoryItem, moduleItem, category.getCategoryName(), Color.DARKSEAGREEN);
                 categoryItem.getValue().setOnMouseClicked(mouseEvent ->
-                        onClickCategory(mouseEvent, module.getModuleCode(), category)
+                        onClickCategory(mouseEvent, category)
                 );
 
                 // Get and sort Task List
@@ -73,11 +77,11 @@ public class DirectoryTree extends TreeView<Label> {
                 for (Task task : taskList) {
                     // Add task to tree
                     TreeItem<Label> taskItem = new TreeItem<>();
-                    if (!task.getDeadline().isPresent()) {
-                        styleTreeItem(taskItem, categoryItem, task.getDescription(), Color.CORNFLOWERBLUE);
-                    } else if (task.isDone()) {
-                        // Task is done but not deleted yet
+                    if (task.isDone()) {
                         styleTreeItem(taskItem, categoryItem, task.getDescription(), Color.LIGHTGRAY);
+                    } else if (!task.getDeadline().isPresent()) {
+                        // Task is done but not deleted yet
+                        styleTreeItem(taskItem, categoryItem, task.getDescription(), Color.CORNFLOWERBLUE);
                     } else if (task.getDeadline().isDue()) {
                         // Highlight if task is due
                         styleTreeItem(taskItem, categoryItem, task.getDescription(), Color.CRIMSON);
@@ -90,7 +94,7 @@ public class DirectoryTree extends TreeView<Label> {
                         styleTreeItem(taskItem, categoryItem, task.getDescription(), Color.CORNFLOWERBLUE);
                     }
                     taskItem.getValue().setOnMouseClicked(mouseEvent ->
-                            onClickTask(mouseEvent, module.getModuleCode(), category.getCategoryName(), task)
+                            onClickTask(mouseEvent, task)
                     );
                 }
             }
@@ -113,27 +117,35 @@ public class DirectoryTree extends TreeView<Label> {
     }
 
     private void onClickModule(MouseEvent mouseEvent, Module module) {
-        final String listCategoryString = String.format("lsc -m %s -e -a", module.getModuleCode());
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            new GuiExecutor(consoleScreen).showMessage(module.toString());
-            new GuiExecutor(consoleScreen).executeAction(listCategoryString);
+            if (mouseEvent.getClickCount() == 1) {
+                new GuiExecutor(consoleScreen).executeCommand(new ChangeDirectoryCommand(module));
+                directoryPathLabel.setText(DirectoryTraverser.getFullPath()); // Reset path
+            } else if (mouseEvent.getClickCount() == 2) {
+                new GuiExecutor(consoleScreen).executeCommand(new InfoCommand(module));
+            }
         }
     }
 
-    private void onClickCategory(MouseEvent mouseEvent, String moduleCode, Category category) {
-        final String listTaskString = String.format("lst -m %s -c %s -e -a", moduleCode, category.getCategoryName());
+    private void onClickCategory(MouseEvent mouseEvent, Category category) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            new GuiExecutor(consoleScreen).showMessage(category.toString());
-            new GuiExecutor(consoleScreen).executeAction(listTaskString);
+            if (mouseEvent.getClickCount() == 1) {
+                new GuiExecutor(consoleScreen).executeCommand(new ChangeDirectoryCommand(category));
+                directoryPathLabel.setText(DirectoryTraverser.getFullPath()); // Reset path
+            } else if (mouseEvent.getClickCount() == 2) {
+                new GuiExecutor(consoleScreen).executeCommand(new InfoCommand(category));
+            }
         }
     }
 
-    private void onClickTask(MouseEvent mouseEvent, String moduleCode, String categoryName, Task task) {
-        final String listFileString =
-                String.format("lsf -m %s -c %s -t %s -e -a", moduleCode, categoryName, task.getDescription());
+    private void onClickTask(MouseEvent mouseEvent, Task task) {
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            new GuiExecutor(consoleScreen).showMessage(task.toString());
-            new GuiExecutor(consoleScreen).executeAction(listFileString);
+            if (mouseEvent.getClickCount() == 1) {
+                new GuiExecutor(consoleScreen).executeCommand(new ChangeDirectoryCommand(task));
+                directoryPathLabel.setText(DirectoryTraverser.getFullPath()); // Reset path
+            } else if (mouseEvent.getClickCount() == 2) {
+                new GuiExecutor(consoleScreen).executeCommand(new InfoCommand(task));
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
 package seedu.nuke.data;
 
-import com.alibaba.fastjson.JSON;
 import seedu.nuke.data.storage.Decoder;
 import seedu.nuke.data.storage.Encoder;
-import seedu.nuke.data.storage.StorageManager;
+import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Module;
+import seedu.nuke.directory.Root;
 import seedu.nuke.exception.CorruptedFileException;
+import seedu.nuke.exception.IncorrectDirectoryLevelException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -17,122 +18,116 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**
- * a screen shot manager that manages all scree shots and deals with operations such as save screen shots and undo.
+ * A screen shot manager that stores the previous states of the list and performs operations to move about the states;
+ * i.e. undo and redo.
  */
 public class ScreenShotManager {
-    private static ArrayList<ScreenShot> screenShotList = new ArrayList<>();
     private static Stack<ScreenShot> undoStack = new Stack<>();
-    private static int pointer = -1;
+    private static Stack<ScreenShot> redoStack = new Stack<>();
 
-    private static ScreenShot popLastScreenShot() throws EmptyStackException {
-        undoStack.pop();
+    // public static void setIsLastCommandRedo(boolean isLastCommandRedo) {
+    //     ScreenShotManager.isLastCommandRedo = isLastCommandRedo;
+    // }
+    //
+    // private static boolean isLastCommandRedo = false;
+
+    /**
+     * Initialises the screen shot manager with its first screen shot of the starting list.
+     */
+    public static void initialise() {
+        String encodedSavedList = new Encoder(ModuleManager.getModuleList()).encode();
+        ScreenShot screenShot = new ScreenShot(encodedSavedList);
+        assert undoStack.isEmpty() : "Undo stack should be empty!";
+        assert redoStack.isEmpty() : "Redo stack should be empty!";
+        undoStack.push(screenShot);
+    }
+
+    private static ScreenShot popPreviousScreenShot() throws EmptyStackException {
+        // There should be at least 2 screen shots to allow undo
+        if (undoStack.size() < 2) {
+            throw new EmptyStackException();
+        }
+        ScreenShot currentState = undoStack.pop();
+        redoStack.push(currentState);
         return undoStack.peek();
     }
 
-    private static ScreenShot peekLastScreenShot() {
+    private static ScreenShot peekPreviousScreenShot() {
         return undoStack.peek();
     }
 
     /**
-     * revert to the last changed state for moduleList for undo feature.
+     * Revert to the previous changed state of the list.
      *
      * @throws IOException exception is thrown when error occurred during IO operation.
      * @throws CorruptedFileException exception is thrown when converting a corrupted string to moduleList.
      * @throws EmptyStackException exception is thrown when user trying to undo at the initial state.
      */
-    public static void revertToLastScreenShot() throws IOException, CorruptedFileException, EmptyStackException {
-        ScreenShot lastScreenShot = popLastScreenShot();
-        String moduleListString = lastScreenShot.getModuleListString();
-        InputStream is = new ByteArrayInputStream(moduleListString.getBytes());
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+    public static void undo() throws IOException, CorruptedFileException, EmptyStackException,
+            IncorrectDirectoryLevelException {
+        ScreenShot previousState = popPreviousScreenShot();
+        String encodedSavedList = previousState.getEncodedSavedList();
+
+        InputStream stream = new ByteArrayInputStream(encodedSavedList.getBytes());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+
         ArrayList<Module> moduleList = new Decoder(bufferedReader).decode();
         ModuleManager.setModuleList(moduleList);
         bufferedReader.close();
+
+        // Move back to Root for now to avoid "unusual" situations
+        DirectoryTraverser.traverseTo(new Root());
+    }
+
+    /**
+     * Revert back to the next changed state which had been undone by the user.
+     *
+     * @throws IOException exception is thrown when error occurred during IO operation.
+     * @throws CorruptedFileException exception is thrown when converting a corrupted string to moduleList.
+     * @throws EmptyStackException exception is thrown when user trying to undo at the initial state.
+     */
+    public static void redo() throws IOException, CorruptedFileException, EmptyStackException {
+        ScreenShot redoScreenShot = popRedoScreenShot();
+        String encodedSavedList = redoScreenShot.getEncodedSavedList();
+
+        InputStream stream = new ByteArrayInputStream(encodedSavedList.getBytes());
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+
+        ArrayList<Module> moduleList = new Decoder(bufferedReader).decode();
+        ModuleManager.setModuleList(moduleList);
+        bufferedReader.close();
+        // isLastCommandRedo = true;
+    }
+
+    private static ScreenShot popRedoScreenShot() throws EmptyStackException {
+        ScreenShot nextState = redoStack.pop();
+        undoStack.push(nextState);
+        return nextState;
     }
 
     /**
      * Save the moduleList as a string if it was changed.
      */
     public static void saveScreenShot() {
-        String currentModuleListString = new Encoder(ModuleManager.getModuleList()).encode();
-        ScreenShot screenShot = new ScreenShot(currentModuleListString);
-        if (getScreenShotSize() == 0) {
+        String encodedSavedList = new Encoder(ModuleManager.getModuleList()).encode();
+        ScreenShot screenShot = new ScreenShot(encodedSavedList);
+        if (getUndoStackSize() == 0) {
             undoStack.push(screenShot);
             return;
         }
-        ScreenShot lastScreenShot = peekLastScreenShot();
-        String lastModuleListString = lastScreenShot.getModuleListString();
-        if (!lastModuleListString.equals(currentModuleListString)) {
+        ScreenShot previousScreenShot = peekPreviousScreenShot();
+        String previousEncodedSavedList = previousScreenShot.getEncodedSavedList();
+        if (!previousEncodedSavedList.equals(encodedSavedList)) {
             undoStack.push(screenShot);
+            if (!redoStack.isEmpty()) {
+                redoStack.clear();
+            }
+            assert redoStack.isEmpty() : "Didn't clear the redo stack!!";
         }
     }
 
-    private static int getScreenShotSize() {
+    private static int getUndoStackSize() {
         return undoStack.size();
     }
 
-    public static ArrayList<ScreenShot> getScreenShotList() {
-        return ScreenShotManager.screenShotList;
-    }
-
-    public static void setScreenShotList(ArrayList<ScreenShot> screenShotList) {
-        ScreenShotManager.screenShotList = screenShotList;
-    }
-
-    public static int getCurrentPointer() {
-        return ScreenShotManager.pointer;
-    }
-
-    public static void setCurrentPointer(int pointer) {
-        ScreenShotManager.pointer = pointer;
-    }
-
-    /**
-     * return a scree shot with certain index.
-     *
-     * @return a screen shot
-     */
-    public static ScreenShot getCurrentScreenShot() {
-        if (getCurrentPointer() < 0) {
-            return screenShotList.get(0);
-        }
-        return screenShotList.get(getCurrentPointer());
-    }
-
-    public static void movePointerForward() {
-        ScreenShotManager.pointer++;
-    }
-
-    /**
-     * change to another screen shot.
-     */
-    public static void movePointerBackWard() {
-        if (ScreenShotManager.pointer > 0) {
-            ScreenShotManager.pointer--;
-        }
-    }
-
-    public static void saveNewScreenShot(ScreenShot toAdd) {
-        movePointerForward();
-        screenShotList.add(toAdd);
-    }
-
-    public static void cutTailNodes() {
-        screenShotList = (ArrayList<ScreenShot>) screenShotList.subList(0, pointer);
-    }
-
-    /**
-     * save the screen shot.
-     */
-    public static ScreenShot takeNewScreenShot() {
-        String jsonStrModuleList = StorageManager.saveModuleToString(ModuleManager.getModuleList());
-        return new ScreenShot(jsonStrModuleList);
-    }
-
-    /**
-     * set module manager data according to screen shot manager data.
-     */
-    public static ArrayList<Module> readFromScreenShot(String jsonStr) {
-        return (ArrayList<Module>) JSON.parseArray(jsonStr, Module.class);
-    }
 }

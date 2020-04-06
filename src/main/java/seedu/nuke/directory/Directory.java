@@ -27,4 +27,12 @@ public abstract class Directory {
      *  The parent of the class in the Directory
      */
     public abstract Directory getParent();
+
+    /**
+     * Returns the corresponding level of the Directory.
+     *
+     * @return
+     *  The level of the Directory
+     */
+    public abstract DirectoryLevel getLevel();
 }

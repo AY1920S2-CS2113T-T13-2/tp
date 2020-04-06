@@ -4,6 +4,7 @@ import seedu.nuke.NukeLogger;
 import seedu.nuke.command.Command;
 import seedu.nuke.command.CommandResult;
 import seedu.nuke.data.ModuleManager;
+import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.exception.ModuleNotProvidedException;
 import seedu.nuke.directory.Module;
 
@@ -60,6 +61,7 @@ public class AddModuleCommand extends AddCommand {
             ModuleManager.add(toAdd);
             //logger.log(Level.INFO, String.format("Module %s was added into the module list.", moduleCode));
             assert toAdd.getModuleCode().equals(moduleCode) : "Incorrect last added module!";
+            StorageManager.setIsSave();
             return new CommandResult(messageAddModuleSuccess(toAdd.getModuleCode(), toAdd.getTitle()));
         } catch (ModuleManager.DuplicateModuleException e) {
             //logger.log(Level.WARNING, String.format("Duplicate module %s attempted to be added.", moduleCode));

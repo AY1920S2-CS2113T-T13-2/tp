@@ -7,10 +7,12 @@ import seedu.nuke.data.CategoryManager;
 import seedu.nuke.data.ModuleManager;
 import seedu.nuke.data.TaskFileManager;
 import seedu.nuke.data.TaskManager;
+import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.data.storage.StoragePath;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Task;
 import seedu.nuke.directory.TaskFile;
+import seedu.nuke.exception.ExceedLimitException;
 import seedu.nuke.exception.IncorrectDirectoryLevelException;
 import seedu.nuke.gui.io.GuiExecutor;
 
@@ -34,13 +36,14 @@ import static seedu.nuke.util.ExceptionMessage.MESSAGE_DUPLICATE_TASK_FILE;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_IO_EXCEPTION;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_SECURITY_EXCEPTION;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_FILE_SYSTEM_EXCEPTION;
+import static seedu.nuke.util.ExceptionMessage.MESSAGE_IMPLICIT_FILE_EXCEED_LIMIT;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_INCORRECT_DIRECTORY_LEVEL;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_INVALID_FILE_PATH;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_MISSING_FILE_PATH;
-import static seedu.nuke.util.ExceptionMessage.MESSAGE_MISSING_PARAMETERS;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_MODULE_NOT_FOUND;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_TASK_NOT_FOUND;
 import static seedu.nuke.util.Message.MESSAGE_NO_FILE_CHOSEN;
+import static seedu.nuke.util.Message.MESSAGE_FILE_EXCEED_LIMIT;
 import static seedu.nuke.util.Message.messageAddFileSuccess;
 
 /**
@@ -69,8 +72,8 @@ public class AddFileCommand extends AddCommand {
     private String categoryName;
     private String taskDescription;
     private String fileName;
+    private String originalFilePath;
     private String filePath;
-
 
     /**
      * Constructs the command to add a file.
@@ -92,7 +95,7 @@ public class AddFileCommand extends AddCommand {
         this.categoryName = categoryName;
         this.taskDescription = taskDescription;
         this.fileName = fileName;
-        this.filePath = filePath;
+        this.originalFilePath = filePath;
     }
 
     /**
@@ -114,16 +117,48 @@ public class AddFileCommand extends AddCommand {
     }
 
     /**
+     * Removes the extension from a file name if present.
+     *
+     * @param fileName
+     *  The name of the file to remove the extension
+     * @return
+     *  The file name without its extension
+     */
+    private String removeExtension(String fileName) {
+        if (fileName.indexOf(".") > 0) {
+            return fileName.substring(0, fileName.lastIndexOf("."));
+        }
+        return fileName;
+    }
+
+    /**
      * Copies file from user-specified path into a folder in the application.
      *
+     * @param task
+     *  The parent task of the file
      * @throws IOException
      *  If there is an error copying the file
      */
-    private void copyFile() throws IOException {
-        File sourceFile = new File(filePath);
+    private void copyFile(Task task) throws IOException, ExceedLimitException,
+            TaskFileManager.DuplicateTaskFileException {
+        File sourceFile = new File(originalFilePath);
         if (!sourceFile.exists() || !sourceFile.isFile()) {
             throw new FileNotFoundException();
         }
+
+        // Automatically updates new file name
+        if (fileName.isEmpty()) {
+            fileName = removeExtension(sourceFile.getName());
+            if (exceedLengthLimit()) {
+                throw new ExceedLimitException();
+            }
+        }
+
+        // Checks if name is duplicated
+        if (isDuplicateName(task, fileName)) {
+            throw new TaskFileManager.DuplicateTaskFileException();
+        }
+
         Path sourcePath = sourceFile.toPath();
 
         String randomHash = generateRandomHash();
@@ -133,47 +168,29 @@ public class AddFileCommand extends AddCommand {
         Files.createDirectories(destinationPath.getParent());
 
         Files.copy(sourcePath, destinationPath, REPLACE_EXISTING);
-        filePath = String.format("%s/%s", StoragePath.TASK_FILE_DIRECTORY_PATH, randomHash);
+        filePath = randomHash;
     }
 
-    /**
-     * Constructs the command to add a file without a path.
-     *
-     * @param moduleCode
-     *  The module code of the module that has the category to add the task
-     * @param categoryName
-     *  The name of the category to add the task
-     * @param taskDescription
-     *  The priority of the category
-     * @param fileName
-     *  The name of the file
-     */
-    public AddFileCommand(String moduleCode, String categoryName, String taskDescription, String fileName) {
-        this(moduleCode, categoryName, taskDescription, fileName, null);
+    private boolean exceedLengthLimit() {
+        return fileName.length() > 30;
+    }
+
+    private boolean isDuplicateName(Task task, String fileName) {
+        return task.getFiles().contains(fileName);
     }
 
     private void retrieveFile() throws Exception {
-        if (filePath.isEmpty()) {
-            if (Executor.isGui()) {
-                try {
-                    String[] chosenFileInformation = GuiExecutor.executeFileChooser();
-                    if (chosenFileInformation == null) {
-                        throw new Exception(MESSAGE_NO_FILE_CHOSEN);
-                    }
-                    filePath = chosenFileInformation[0];
-                    if (fileName.isEmpty()) {
-                        fileName = chosenFileInformation[1];
-                    }
-                } catch (Exception e) {
-                    throw new Exception(MESSAGE_FILE_IO_EXCEPTION);
-                }
-            } else {
-                throw new Exception(MESSAGE_MISSING_FILE_PATH);
-            }
-        }
+        if (originalFilePath.isEmpty()) {
+            assert Executor.isGui() : "Must be using a Gui in order to retrieve file!";
 
-        if (fileName.isEmpty()) {
-            throw new Exception(MESSAGE_MISSING_PARAMETERS);
+            String[] chosenFileInformation = GuiExecutor.executeFileChooser();
+            if (chosenFileInformation == null) {
+                throw new Exception(MESSAGE_NO_FILE_CHOSEN);
+            }
+            originalFilePath = chosenFileInformation[0];
+            if (fileName.isEmpty()) {
+                fileName = chosenFileInformation[1];
+            }
         }
     }
 
@@ -187,12 +204,21 @@ public class AddFileCommand extends AddCommand {
      */
     @Override
     public CommandResult execute() {
+        if (exceedLengthLimit()) {
+            return new CommandResult(MESSAGE_FILE_EXCEED_LIMIT);
+        }
+        if (originalFilePath.isEmpty() && !Executor.isGui()) {
+            return new CommandResult(MESSAGE_MISSING_FILE_PATH);
+        }
         try {
             Task parentTask = DirectoryTraverser.getTaskDirectory(moduleCode, categoryName, taskDescription);
             retrieveFile();
-            copyFile();
-            TaskFile toAdd = new TaskFile(parentTask, fileName, filePath);
+
+            copyFile(parentTask);
+            String fullFilePath = new File(originalFilePath).getAbsolutePath();
+            TaskFile toAdd = new TaskFile(parentTask, fileName, filePath, fullFilePath);
             parentTask.getFiles().add(toAdd);
+            StorageManager.setIsSave();
             return new CommandResult(messageAddFileSuccess(fileName));
         } catch (ModuleManager.ModuleNotFoundException e) {
             return new CommandResult(MESSAGE_MODULE_NOT_FOUND);
@@ -214,6 +240,8 @@ public class AddFileCommand extends AddCommand {
             return new CommandResult(MESSAGE_INVALID_FILE_PATH);
         } catch (SecurityException e) {
             return new CommandResult(MESSAGE_FILE_SECURITY_EXCEPTION);
+        } catch (ExceedLimitException e) {
+            return new CommandResult(MESSAGE_IMPLICIT_FILE_EXCEED_LIMIT);
         } catch (Exception e) {
             return new CommandResult(e.getMessage());
         }

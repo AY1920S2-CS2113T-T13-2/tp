@@ -86,6 +86,11 @@ public class Module extends Directory {
         return (Root) this.parent;
     }
 
+    @Override
+    public DirectoryLevel getLevel() {
+        return DirectoryLevel.MODULE;
+    }
+
     /**
      * Edits the module code of the module.
      *

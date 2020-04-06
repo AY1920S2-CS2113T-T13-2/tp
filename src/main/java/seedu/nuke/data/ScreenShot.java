@@ -1,14 +1,14 @@
 package seedu.nuke.data;
 
 public class ScreenShot {
-    private String moduleListString;
+    private String encodedSavedList;
 
-    public ScreenShot(String moduleListInJsonStr) {
-        this.moduleListString = moduleListInJsonStr;
+    public ScreenShot(String encodedSavedList) {
+        this.encodedSavedList = encodedSavedList;
     }
 
-    public String getModuleListString() {
-        return moduleListString;
+    public String getEncodedSavedList() {
+        return encodedSavedList;
     }
 }
 

@@ -2,7 +2,7 @@ package seedu.nuke.command;
 
 import static seedu.nuke.util.Message.MESSAGE_EXIT;
 
-public class ExitCommand extends TaskCommand {
+public class ExitCommand extends Command {
     public static final String COMMAND_WORD = "bye";
     public static final String FORMAT = COMMAND_WORD;
     public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator() + "Exit from Nuke"

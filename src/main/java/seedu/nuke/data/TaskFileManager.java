@@ -56,7 +56,7 @@ public class TaskFileManager {
      * @return
      *  <code>TRUE</code> if there exists a duplicate, and <code>FALSE</code> otherwise
      */
-    private boolean contains(String fileName) {
+    public boolean contains(String fileName) {
         for (TaskFile file : fileList) {
             if (file.isSameFile(fileName)) {
                 return true;

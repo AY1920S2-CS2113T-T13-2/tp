@@ -59,6 +59,11 @@ public class Category extends Directory {
         return (Module) this.parent;
     }
 
+    @Override
+    public DirectoryLevel getLevel() {
+        return DirectoryLevel.CATEGORY;
+    }
+
     /**
      * Edit the name of the category.
      *

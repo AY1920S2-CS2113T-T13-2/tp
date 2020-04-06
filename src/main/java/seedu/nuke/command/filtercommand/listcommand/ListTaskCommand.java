@@ -13,7 +13,8 @@ public class ListTaskCommand extends ListCommand {
     public static final String COMMAND_WORD = "lst";
     public static final String FORMAT = COMMAND_WORD + " [ <task keyword> -m <module keyword> "
             + "-c <category keyword> -e -a ]";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator() + "list task"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator()
+            + "Filters and lists your tasks"
             + System.lineSeparator() + FORMAT + System.lineSeparator();
 
     private String moduleKeyWord;

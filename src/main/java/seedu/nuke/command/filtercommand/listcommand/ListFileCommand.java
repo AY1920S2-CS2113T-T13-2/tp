@@ -12,8 +12,11 @@ import static seedu.nuke.util.Message.MESSAGE_SHOW_LIST;
 
 public class ListFileCommand extends ListCommand {
     public static final String COMMAND_WORD = "lsf";
-    public static final String FORMAT = "lsf [ <file keyword> -f <task keyword> -c <category keyword> "
-            + "-m <module keyword> -e -a ]";
+    public static final String FORMAT = "lsf [ <file keyword> -m <module keyword> "
+            + "-c <category keyword> -t <task keyword> -e -a ]";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + System.lineSeparator()
+            + "Filters and lists your files"
+            + System.lineSeparator() + FORMAT + System.lineSeparator();
 
     private String moduleKeyWord;
     private String categoryKeyword;

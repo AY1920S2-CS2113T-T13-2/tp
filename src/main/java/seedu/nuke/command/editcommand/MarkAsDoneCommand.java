@@ -4,6 +4,7 @@ import seedu.nuke.command.CommandResult;
 import seedu.nuke.data.CategoryManager;
 import seedu.nuke.data.ModuleManager;
 import seedu.nuke.data.TaskManager;
+import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.Task;
 import seedu.nuke.exception.IncorrectDirectoryLevelException;
@@ -57,7 +58,8 @@ public class MarkAsDoneCommand extends EditCommand {
         try {
             Task toMarkAsDone = DirectoryTraverser.getTaskDirectory(moduleCode, categoryName, taskDescription);
             toMarkAsDone.setDone(true);
-            assert toMarkAsDone.isDone() : "how can this be?";
+            assert toMarkAsDone.isDone() : "How can this be?";
+            StorageManager.setIsSave();
             return new CommandResult(MESSAGE_EDIT_TASK_SUCCESS);
         } catch (ModuleManager.ModuleNotFoundException e) {
             return new CommandResult(MESSAGE_MODULE_NOT_FOUND);

@@ -6,6 +6,7 @@ import seedu.nuke.data.CategoryManager;
 import seedu.nuke.data.ModuleManager;
 import seedu.nuke.data.TaskFileManager;
 import seedu.nuke.data.TaskManager;
+import seedu.nuke.data.storage.StorageManager;
 import seedu.nuke.directory.DirectoryTraverser;
 import seedu.nuke.directory.TaskFile;
 import seedu.nuke.exception.IncorrectDirectoryLevelException;
@@ -23,6 +24,7 @@ import static seedu.nuke.util.ExceptionMessage.MESSAGE_MODULE_NOT_FOUND;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_TASK_FILE_NOT_FOUND;
 import static seedu.nuke.util.ExceptionMessage.MESSAGE_TASK_NOT_FOUND;
 import static seedu.nuke.util.Message.MESSAGE_EDIT_TASK_SUCCESS;
+import static seedu.nuke.util.Message.MESSAGE_FILE_EXCEED_LIMIT;
 
 /**
  * <h3>Edit File Command</h3>
@@ -73,6 +75,10 @@ public class EditFileCommand extends EditCommand {
         this.newFileName = newFileName;
     }
 
+    private boolean exceedLengthLimit() {
+        return newFileName.length() > 30;
+    }
+
     /**
      * Executes the <b>Edit File Command</b> to edit a <b>File</b> with the <code>task description</code>
      * from the <b>File List</b>.
@@ -84,10 +90,14 @@ public class EditFileCommand extends EditCommand {
      */
     @Override
     public CommandResult execute() {
+        if (exceedLengthLimit()) {
+            return new CommandResult(MESSAGE_FILE_EXCEED_LIMIT);
+        }
         try {
             TaskFile toEdit =
                     DirectoryTraverser.getFileDirectory(moduleCode, categoryName, taskDescription, oldFileName);
             toEdit.getParent().getFiles().edit(toEdit, newFileName);
+            StorageManager.setIsSave();
             return new CommandResult(MESSAGE_EDIT_TASK_SUCCESS);
         } catch (ModuleManager.ModuleNotFoundException e) {
             return new CommandResult(MESSAGE_MODULE_NOT_FOUND);

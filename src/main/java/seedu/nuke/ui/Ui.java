@@ -1,6 +1,6 @@
 package seedu.nuke.ui;
 
-import seedu.nuke.command.ChangeDirectoryCommand;
+import seedu.nuke.command.misc.ChangeDirectoryCommand;
 import seedu.nuke.command.CommandResult;
 import seedu.nuke.command.ExitCommand;
 import seedu.nuke.command.HelpCommand;
@@ -17,7 +17,7 @@ import seedu.nuke.command.filtercommand.deletecommand.DeleteCategoryCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteModuleCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteTagCommand;
 import seedu.nuke.command.filtercommand.deletecommand.DeleteTaskCommand;
-import seedu.nuke.command.filtercommand.listcommand.ListAllTasksDeadlineCommand;
+import seedu.nuke.command.filtercommand.listcommand.ListTaskSortedCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListCategoryCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListModuleTasksDeadlineCommand;
 import seedu.nuke.command.filtercommand.listcommand.ListTaskCommand;
@@ -65,7 +65,7 @@ public class Ui {
         commands.add(ListCategoryCommand.MESSAGE_USAGE);
         commands.add(ListTaskCommand.MESSAGE_USAGE);
         commands.add(ListModuleTasksDeadlineCommand.MESSAGE_USAGE);
-        commands.add(ListAllTasksDeadlineCommand.MESSAGE_USAGE);
+        commands.add(ListTaskSortedCommand.MESSAGE_USAGE);
         commands.add(HelpCommand.MESSAGE_USAGE);
         commands.add(ExitCommand.MESSAGE_USAGE);
     }
@@ -96,14 +96,16 @@ public class Ui {
      *  The result after executing a command given by the user input
      */
     public void showResult(CommandResult result) {
-        out.println(result.getFeedbackToUser().replace("\n", LS));
-
-        if ((result.getDirectoryLevel() == DirectoryLevel.NONE) && result.getHelpGuide() == null) {
+        if (result.getFeedbackToUser() == null) {
+            showMessage("");
             return;
         }
 
-        if (result.getHelpGuide() != null) {
-            printShownList(result.getHelpGuide());
+        if (!result.getFeedbackToUser().isEmpty()) {
+            showMessage(result.getFeedbackToUser());
+        }
+
+        if ((result.getDirectoryLevel() == DirectoryLevel.NONE) && result.getHelpGuide() == null) {
             return;
         }
 
@@ -138,11 +140,19 @@ public class Ui {
             listTableToShow = ListCreator.createFileListTable(fileList);
             break;
 
+        case NONE:
+            if (result.getHelpGuide() == null) {
+                return;
+            }
+            ArrayList<String> helpList = result.getHelpGuide();
+            listTableToShow = ListCreator.createGeneralListTable(helpList);
+            break;
+
         default:
             return;
         }
 
-        out.println(listTableToShow);
+        showMessage(listTableToShow);
     }
 
     /**
@@ -150,7 +160,7 @@ public class Ui {
      *
      * @param message Message to be shown
      */
-    public void showSystemMessage(String message) {
+    public void showMessage(String message) {
         out.println(message.replace("\n", LS));
     }
 
@@ -169,5 +179,4 @@ public class Ui {
 
         System.out.println(divider + "\n");
     }
-
 }

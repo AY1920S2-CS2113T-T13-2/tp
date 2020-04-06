@@ -1,11 +1,14 @@
 package seedu.nuke.data;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.io.FileUtils;
+import seedu.nuke.data.storage.StoragePath;
 import seedu.nuke.util.DummyModule;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.BufferedReader;
@@ -14,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class ModuleLoader {
      * @return a HashMapof String to String, which is a map that map all modules with its information
      * @throws FileNotFoundException when cannot find the jason file
      */
-    public static HashMap<String, String> load(String dataFileName) throws FileNotFoundException {
+    public static HashMap<String, String> load(String dataFileName) {
         String jsonStr;
         jsonStr = loadJsonStringFromFile(dataFileName);
         List<DummyModule> moduleList = JSON.parseArray(jsonStr, DummyModule.class);// extractModules(jsonStr);
@@ -50,7 +54,7 @@ public class ModuleLoader {
         return modulesMap;
     }
 
-    private static String loadJsonStringFromFile(String dataFileName) throws FileNotFoundException {
+    private static String loadJsonStringFromFile(String dataFileName) {
         String encoding = "utf8";
         File file = new File(dataFileName);
         Long fileLength = file.length();
@@ -60,8 +64,11 @@ public class ModuleLoader {
             in.read(fileContent);
             in.close();
         } catch (FileNotFoundException e) {
-            //System.out.println("Retrieving the module list from nusmods...");
-            return openFile("https://api.nusmods.com/v2/2019-2020/moduleList.json");
+            File folder = new File(StoragePath.FILE_BASE_PATH);
+            if (!folder.exists() && !folder.isDirectory()) {
+                folder.mkdirs();
+            }
+            return openFile(getModuleListUrlFromNusmods());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,8 +108,9 @@ public class ModuleLoader {
                     buffer.append(" "); // add new line
                     line = reader.readLine(); // read the next line
                 }
-                //System.out.print(buffer.toString());
                 content = buffer.toString();
+
+                saveModuleListToDisk();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -112,4 +120,22 @@ public class ModuleLoader {
         return content;
     }
 
+    private static void saveModuleListToDisk() throws IOException {
+        URL httpUrl = new URL(getModuleListUrlFromNusmods());
+        FileUtils.copyURLToFile(httpUrl, new File(StoragePath.NUS_MODULE_LIST_PATH));
+    }
+
+    private static String getModuleListUrlFromNusmods() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        String urlFmt = "https://api.nusmods.com/v2/%d-%d/moduleList.json";
+        String url;
+        if (month < 6) {
+            url = String.format(urlFmt, year - 1, year);
+        } else {
+            url = String.format(urlFmt, year, year + 1);
+        }
+        return url;
+    }
 }

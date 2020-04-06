@@ -6,5 +6,14 @@ public enum DirectoryLevel {
     MODULE,
     CATEGORY,
     TASK,
-    FILE
+    FILE {
+        @Override
+        public DirectoryLevel next() {
+            return null;
+        }
+    };
+
+    public DirectoryLevel next() {
+        return values()[ordinal() + 1];
+    }
 }

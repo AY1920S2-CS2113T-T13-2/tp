@@ -32,7 +32,11 @@ public class ModuleManager implements Iterable<Module> {
      */
     public static void initialise(HashMap<String, String> modulesMap) {
         ModuleManager.root = new Root();
-        ModuleManager.modulesMap = modulesMap;
+        if (modulesMap == null) {
+            ModuleManager.modulesMap = new HashMap<String,String>();
+        } else {
+            ModuleManager.modulesMap = modulesMap;
+        }
         moduleList = new ArrayList<>();
     }
 

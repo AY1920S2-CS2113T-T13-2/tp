@@ -401,7 +401,7 @@
                         <Separator prefWidth="200.0" />
                                 <ScrollPane fx:id="consoleScreenScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="510.0" prefWidth="1077.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                                     <content>
-                                        <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="600.0" prefWidth="866.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: #fafeff; -fx-background-radius: 10;">
+                                        <TextFlow fx:id="consoleScreen" lineSpacing="1.0" prefHeight="450.0" prefWidth="900.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3; -fx-background-color: #fafeff; -fx-background-radius: 10;">
                                             <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                             </padding>

@@ -262,9 +262,9 @@ List all *module*s in your **Module List**. The **Module List** contains all you
 
 #### Format  
 
-`lsm`  
+`lsm [keyword]`   
 
-> **Note**: The _module code_ is **case-insensitive**. However, it must correspond to a valid **NUS module**. Only **NUS modules** can be added in this version of **Nuke**.
+> **Note**: If keyword is provided, `lsm` will list out all modules with module code containing the keyword, otherwise, `lsm` will list out all modules.
 
 #### Example Usage    
 
@@ -330,7 +330,7 @@ lst [ -m <module code> -c <category name>]
 ## 3. Delete  
 Deletes _modules_, _categories_ or _tasks_ from their respective lists.<br>
 
-As mentioned previously, **Nuke** follows the structure of a **Directory Tree** _(i.e. folder sub-folder structure)_. Therefore, **Nuke** also supports Linux file-system-related command for listing files in a directory: `rm`
+As mentioned previously, **Nuke** follows the structure of a **Directory Tree** _(i.e. folder sub-folder structure)_. Therefore, **Nuke** also supports Linux file-system-related command for deleting a directory: `rm`
 
 - When you are at the **Root Directory**, `rm <module code>` will remove a *module* from your **Module List**.
 - When you are at the **Module Directory**, `rm <category name>` will remove a *category* from your **Category List**. 
@@ -542,7 +542,7 @@ Marks a task as *done*.
 - `task description` -- The _description_ of the _task_
 - `module code` -- The _module code_ of the _module_   to contain the _category_ to be added
 - `category name` -- The _name_ of the   _category_
-    
+  
 #### Example Usage    
 ```
 	done Tutorial 7 -m CS1231 -c Tutorial
@@ -572,7 +572,7 @@ Traverse up and down the Directory Tree from your current directory.
 
 ```  
 	cd Assignment
-```  
+```
 
 <br><br>
 
